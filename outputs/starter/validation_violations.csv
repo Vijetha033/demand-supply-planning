@@ -1,0 +1,19 @@
+check,category,table,record_id,detail,classification
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-001004,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-001005,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-001006,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-001007-L01,4 CS x 1.0 vs master factor 24.0,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-001008-L01,103 KG x 1.0 vs master factor nan,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-001009-L01,6 CS x 1.0 vs master factor 12.0,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0013-2026W43,committed 3032 > capacity 2330,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0019-2026W28,committed 758 > capacity 580,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0036-2026W45,committed 3816 > capacity 2910,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000012,substitute link is PENDING,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000013,substitute link is REJECTED,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000014,substitute link is PENDING,EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-000630,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-000631,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-000632,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-000630,row duplicates another record,EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-000631,row duplicates another record,EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-000632,row duplicates another record,EXPECTED_LABELLED

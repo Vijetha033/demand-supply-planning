@@ -121,24 +121,41 @@ def generate_mitigations(st, sh: pd.DataFrame, M: dict, sr: pd.DataFrame, S: dic
                 if lane is None:
                     rej(mtype, sid, "NO_LANE", f"no effective lead-time lane {sid} -> {loc}")
                     continue
-                arr = as_of + timedelta(days=int(lane["total_lead_days"]))
-                a = ctx.widx(arr)
-                if a > e:
+                total_lt, prod_lt = int(lane["total_lead_days"]), int(lane["production_lead_days"])
+                a_min = ctx.widx(as_of + timedelta(days=total_lt))
+                if a_min > e:
                     rej(mtype, sid, "LEAD_TIME_TOO_LONG",
-                        f"order today arrives {ctx.wid(a)} ({lane['total_lead_days']} days) after the shortage "
+                        f"order today arrives {ctx.wid(a_min)} ({total_lt} days) after the shortage "
                         f"ends {ctx.week_ids[e]}")
                     continue
-                sw = ctx.widx(as_of + timedelta(days=int(lane["production_lead_days"])))
-                si = S["sidx"][sid]
-                rem = int(S["cap"][si, sw] - S["load"][si, sw] - S["reserved"][si, sw])
                 conv, moq, mult = float(tm["uom_conversion_factor"]), int(tm["min_order_qty"]), int(tm["order_multiple"])
-                pq = round_purchase_qty(Q, conv, moq, mult)
-                if pq * conv > rem:
-                    pq = int(math.floor(rem / conv / mult) * mult)
-                    if pq < moq:
-                        rej(mtype, sid, "INSUFFICIENT_CAPACITY",
-                            f"remaining capacity {rem} in {ctx.week_ids[sw]} below MOQ {moq} {tm['purchase_uom']}")
+                si = S["sidx"][sid]
+                pq_full = round_purchase_qty(Q, conv, moq, mult)
+                # Order as late as possible while still arriving by the shortage start (or now if inside
+                # lead time); walk back towards today if that ship week lacks capacity.
+                k_latest = 0
+                while ctx.widx(as_of + timedelta(days=7 * (k_latest + 1) + total_lt)) <= s:
+                    k_latest += 1
+                choice, best_part = None, None
+                for k in range(k_latest, -1, -1):
+                    sw = ctx.widx(as_of + timedelta(days=7 * k + prod_lt))
+                    if sw >= W:
                         continue
+                    rem_k = int(S["cap"][si, sw] - S["load"][si, sw] - S["reserved"][si, sw])
+                    if pq_full * conv <= rem_k:
+                        choice = (k, sw, rem_k, pq_full)
+                        break
+                    part = int(math.floor(rem_k / conv / mult) * mult)
+                    if part >= moq and (best_part is None or part > best_part[3]):
+                        best_part = (k, sw, rem_k, part)
+                choice = choice or best_part
+                if choice is None:
+                    rej(mtype, sid, "INSUFFICIENT_CAPACITY",
+                        f"remaining capacity below MOQ {moq} {tm['purchase_uom']} in every ship week from today "
+                        f"to the latest useful order week")
+                    continue
+                k, sw, rem, pq = choice
+                a = ctx.widx(as_of + timedelta(days=7 * k + total_lt))
                 base = int(round(pq * conv))
                 price = float(tm["unit_cost"])
                 total = base * price
@@ -150,8 +167,8 @@ def generate_mitigations(st, sh: pd.DataFrame, M: dict, sr: pd.DataFrame, S: dic
                                  capacity_available=rem, capacity_consumed=base, moq_check="PASS",
                                  lead_time_check="PASS", approval_check="PASS", capacity_check="PASS",
                                  rationale=f"order {pq} {tm['purchase_uom']} (MOQ {moq}, multiple {mult}) from {sid} "
-                                           f"today; ships {ctx.week_ids[sw]}, arrives {ctx.wid(a)} via "
-                                           f"{lane['lead_time_id']}",
+                                           f"in {ctx.week_ids[k]}; ships {ctx.week_ids[sw]}, arrives {ctx.wid(a)} "
+                                           f"({total_lt}-day lead time {lane['lead_time_id']})",
                                  reserve=[("sup", si, sw, base)]))
         # ---------------------------------------------------- stock transfer from another location
         others = [l for l in locs_by_sku.get(r.sku_id, []) if l != loc]
@@ -261,8 +278,9 @@ def generate_mitigations(st, sh: pd.DataFrame, M: dict, sr: pd.DataFrame, S: dic
                         PC["cap"][pi, w] - PC["planned"][pi, w] - PC["reserved"][pi, w] >= b
                         for w in range(fz, e + 1)) else "INSUFFICIENT_CAPACITY"
                     rej("INCREASE_PRODUCTION", loc, reason,
-                        f"no plant headroom or component stock at {loc} between {ctx.week_ids[fz]} and "
-                        f"{ctx.week_ids[e]}")
+                        (f"plant {loc} has headroom but components lack stock above safety stock between "
+                         if reason == "COMPONENT_SHORTAGE" else f"plant {loc} has no capacity headroom between ")
+                        + f"{ctx.week_ids[fz]} and {ctx.week_ids[e]}")
                 else:
                     a = plan[-1][0]
                     total = total_q * float(info.unit_cost)

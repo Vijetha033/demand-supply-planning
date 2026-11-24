@@ -1,0 +1,1490 @@
+{
+  "as_of": "2025-12-29",
+  "n_checks": 148,
+  "n_violations": 18,
+  "n_expected_labelled": 18,
+  "n_unexpected": 0,
+  "overall_status": "PASS",
+  "checks": [
+    {
+      "check": "schema:calendar_week",
+      "category": "schema",
+      "description": "calendar_week: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 52,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:calendar_week",
+      "category": "primary_key",
+      "description": "calendar_week.week_id unique and not null",
+      "rows_checked": 52,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:location",
+      "category": "schema",
+      "description": "location: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 10,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:location",
+      "category": "primary_key",
+      "description": "location.location_id unique and not null",
+      "rows_checked": 10,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:supplier",
+      "category": "schema",
+      "description": "supplier: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 50,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:supplier",
+      "category": "primary_key",
+      "description": "supplier.supplier_id unique and not null",
+      "rows_checked": 50,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:sku",
+      "category": "schema",
+      "description": "sku: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 300,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:sku",
+      "category": "primary_key",
+      "description": "sku.sku_id unique and not null",
+      "rows_checked": 300,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:sku_location",
+      "category": "schema",
+      "description": "sku_location: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 408,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:sku_location",
+      "category": "primary_key",
+      "description": "sku_location.sku_location_id unique and not null",
+      "rows_checked": 408,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:sku_location",
+      "category": "duplicate",
+      "description": "sku_location natural key ['sku_id', 'location_id'] unique",
+      "rows_checked": 408,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:sku_location.sku_id->sku",
+      "category": "foreign_key",
+      "description": "sku_location(sku_id) -> sku",
+      "rows_checked": 408,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:sku_location.location_id->location",
+      "category": "foreign_key",
+      "description": "sku_location(location_id) -> location",
+      "rows_checked": 408,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:sku_location.primary_supplier_id->supplier",
+      "category": "foreign_key",
+      "description": "sku_location(primary_supplier_id) -> supplier",
+      "rows_checked": 408,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:supplier_sku",
+      "category": "schema",
+      "description": "supplier_sku: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 428,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:supplier_sku",
+      "category": "primary_key",
+      "description": "supplier_sku.supplier_sku_id unique and not null",
+      "rows_checked": 428,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:supplier_sku",
+      "category": "duplicate",
+      "description": "supplier_sku natural key ['supplier_id', 'sku_id'] unique",
+      "rows_checked": 428,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:supplier_sku.supplier_id->supplier",
+      "category": "foreign_key",
+      "description": "supplier_sku(supplier_id) -> supplier",
+      "rows_checked": 428,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:supplier_sku.sku_id->sku",
+      "category": "foreign_key",
+      "description": "supplier_sku(sku_id) -> sku",
+      "rows_checked": 428,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:lead_time",
+      "category": "schema",
+      "description": "lead_time: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 206,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:lead_time",
+      "category": "primary_key",
+      "description": "lead_time.lead_time_id unique and not null",
+      "rows_checked": 206,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:lead_time",
+      "category": "duplicate",
+      "description": "lead_time natural key ['supplier_id', 'location_id', 'version'] unique",
+      "rows_checked": 206,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:lead_time.supplier_id->supplier",
+      "category": "foreign_key",
+      "description": "lead_time(supplier_id) -> supplier",
+      "rows_checked": 206,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:lead_time.location_id->location",
+      "category": "foreign_key",
+      "description": "lead_time(location_id) -> location",
+      "rows_checked": 206,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:supplier_capacity",
+      "category": "schema",
+      "description": "supplier_capacity: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 2600,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:supplier_capacity",
+      "category": "primary_key",
+      "description": "supplier_capacity.supplier_capacity_id unique and not null",
+      "rows_checked": 2600,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:supplier_capacity",
+      "category": "duplicate",
+      "description": "supplier_capacity natural key ['supplier_id', 'week_id'] unique",
+      "rows_checked": 2600,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:supplier_capacity.supplier_id->supplier",
+      "category": "foreign_key",
+      "description": "supplier_capacity(supplier_id) -> supplier",
+      "rows_checked": 2600,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:supplier_capacity.week_id->calendar_week",
+      "category": "foreign_key",
+      "description": "supplier_capacity(week_id) -> calendar_week",
+      "rows_checked": 2600,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:forecast_demand",
+      "category": "schema",
+      "description": "forecast_demand: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 17366,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:forecast_demand",
+      "category": "primary_key",
+      "description": "forecast_demand.demand_id unique and not null",
+      "rows_checked": 17366,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:forecast_demand",
+      "category": "duplicate",
+      "description": "forecast_demand natural key ['sku_id', 'location_id', 'week_id'] unique",
+      "rows_checked": 17366,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:forecast_demand.sku_id->sku",
+      "category": "foreign_key",
+      "description": "forecast_demand(sku_id) -> sku",
+      "rows_checked": 17366,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:forecast_demand.location_id->location",
+      "category": "foreign_key",
+      "description": "forecast_demand(location_id) -> location",
+      "rows_checked": 17366,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:forecast_demand.week_id->calendar_week",
+      "category": "foreign_key",
+      "description": "forecast_demand(week_id) -> calendar_week",
+      "rows_checked": 17366,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:forecast_demand.sku_id+location_id->sku_location",
+      "category": "foreign_key",
+      "description": "forecast_demand(sku_id, location_id) -> sku_location",
+      "rows_checked": 17366,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:inventory",
+      "category": "schema",
+      "description": "inventory: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 632,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:inventory",
+      "category": "primary_key",
+      "description": "inventory.inventory_id unique and not null",
+      "rows_checked": 632,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:inventory.sku_id->sku",
+      "category": "foreign_key",
+      "description": "inventory(sku_id) -> sku",
+      "rows_checked": 632,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:inventory.location_id->location",
+      "category": "foreign_key",
+      "description": "inventory(location_id) -> location",
+      "rows_checked": 632,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:inventory.po_line_id->purchase_order_line",
+      "category": "foreign_key",
+      "description": "inventory(po_line_id) -> purchase_order_line",
+      "rows_checked": 632,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:inventory.sku_id+location_id->sku_location",
+      "category": "foreign_key",
+      "description": "inventory(sku_id, location_id) -> sku_location",
+      "rows_checked": 632,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:purchase_order",
+      "category": "schema",
+      "description": "purchase_order: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 1009,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:purchase_order",
+      "category": "primary_key",
+      "description": "purchase_order.po_id unique and not null",
+      "rows_checked": 1009,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:purchase_order.supplier_id->supplier",
+      "category": "foreign_key",
+      "description": "purchase_order(supplier_id) -> supplier",
+      "rows_checked": 1009,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:purchase_order.location_id->location",
+      "category": "foreign_key",
+      "description": "purchase_order(location_id) -> location",
+      "rows_checked": 1009,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:purchase_order.lead_time_id->lead_time",
+      "category": "foreign_key",
+      "description": "purchase_order(lead_time_id) -> lead_time",
+      "rows_checked": 1009,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:purchase_order_line",
+      "category": "schema",
+      "description": "purchase_order_line: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 4846,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:purchase_order_line",
+      "category": "primary_key",
+      "description": "purchase_order_line.po_line_id unique and not null",
+      "rows_checked": 4846,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:purchase_order_line",
+      "category": "duplicate",
+      "description": "purchase_order_line natural key ['po_id', 'sku_id'] unique",
+      "rows_checked": 4846,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:purchase_order_line.po_id->purchase_order",
+      "category": "foreign_key",
+      "description": "purchase_order_line(po_id) -> purchase_order",
+      "rows_checked": 4846,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:purchase_order_line.sku_id->sku",
+      "category": "foreign_key",
+      "description": "purchase_order_line(sku_id) -> sku",
+      "rows_checked": 4846,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:purchase_order_line.supplier_sku_id->supplier_sku",
+      "category": "foreign_key",
+      "description": "purchase_order_line(supplier_sku_id) -> supplier_sku",
+      "rows_checked": 4846,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:purchase_order_event",
+      "category": "schema",
+      "description": "purchase_order_event: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 1584,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:purchase_order_event",
+      "category": "primary_key",
+      "description": "purchase_order_event.event_id unique and not null",
+      "rows_checked": 1584,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:purchase_order_event",
+      "category": "duplicate",
+      "description": "purchase_order_event natural key ['po_id', 'event_seq'] unique",
+      "rows_checked": 1584,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:purchase_order_event.po_id->purchase_order",
+      "category": "foreign_key",
+      "description": "purchase_order_event(po_id) -> purchase_order",
+      "rows_checked": 1584,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:bom",
+      "category": "schema",
+      "description": "bom: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 87,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:bom",
+      "category": "primary_key",
+      "description": "bom.bom_id unique and not null",
+      "rows_checked": 87,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:bom",
+      "category": "duplicate",
+      "description": "bom natural key ['parent_sku_id', 'component_sku_id'] unique",
+      "rows_checked": 87,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:bom.parent_sku_id->sku",
+      "category": "foreign_key",
+      "description": "bom(parent_sku_id) -> sku",
+      "rows_checked": 87,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:bom.component_sku_id->sku",
+      "category": "foreign_key",
+      "description": "bom(component_sku_id) -> sku",
+      "rows_checked": 87,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:production_capacity",
+      "category": "schema",
+      "description": "production_capacity: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 104,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:production_capacity",
+      "category": "primary_key",
+      "description": "production_capacity.production_capacity_id unique and not null",
+      "rows_checked": 104,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:production_capacity",
+      "category": "duplicate",
+      "description": "production_capacity natural key ['location_id', 'week_id'] unique",
+      "rows_checked": 104,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:production_capacity.location_id->location",
+      "category": "foreign_key",
+      "description": "production_capacity(location_id) -> location",
+      "rows_checked": 104,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:production_capacity.week_id->calendar_week",
+      "category": "foreign_key",
+      "description": "production_capacity(week_id) -> calendar_week",
+      "rows_checked": 104,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:production_plan",
+      "category": "schema",
+      "description": "production_plan: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 1477,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:production_plan",
+      "category": "primary_key",
+      "description": "production_plan.production_plan_id unique and not null",
+      "rows_checked": 1477,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:production_plan",
+      "category": "duplicate",
+      "description": "production_plan natural key ['sku_id', 'location_id', 'week_id'] unique",
+      "rows_checked": 1477,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:production_plan.sku_id->sku",
+      "category": "foreign_key",
+      "description": "production_plan(sku_id) -> sku",
+      "rows_checked": 1477,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:production_plan.location_id->location",
+      "category": "foreign_key",
+      "description": "production_plan(location_id) -> location",
+      "rows_checked": 1477,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:production_plan.week_id->calendar_week",
+      "category": "foreign_key",
+      "description": "production_plan(week_id) -> calendar_week",
+      "rows_checked": 1477,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:production_plan.sku_id+location_id->sku_location",
+      "category": "foreign_key",
+      "description": "production_plan(sku_id, location_id) -> sku_location",
+      "rows_checked": 1477,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:sku_substitute",
+      "category": "schema",
+      "description": "sku_substitute: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 14,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:sku_substitute",
+      "category": "primary_key",
+      "description": "sku_substitute.substitution_id unique and not null",
+      "rows_checked": 14,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:sku_substitute",
+      "category": "duplicate",
+      "description": "sku_substitute natural key ['sku_id', 'substitute_sku_id'] unique",
+      "rows_checked": 14,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:sku_substitute.sku_id->sku",
+      "category": "foreign_key",
+      "description": "sku_substitute(sku_id) -> sku",
+      "rows_checked": 14,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:sku_substitute.substitute_sku_id->sku",
+      "category": "foreign_key",
+      "description": "sku_substitute(substitute_sku_id) -> sku",
+      "rows_checked": 14,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:scheduled_receipt",
+      "category": "schema",
+      "description": "scheduled_receipt: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 4059,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:scheduled_receipt",
+      "category": "primary_key",
+      "description": "scheduled_receipt.po_line_id unique and not null",
+      "rows_checked": 4059,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:scheduled_receipt.po_line_id->purchase_order_line",
+      "category": "foreign_key",
+      "description": "scheduled_receipt(po_line_id) -> purchase_order_line",
+      "rows_checked": 4059,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:scheduled_receipt.po_id->purchase_order",
+      "category": "foreign_key",
+      "description": "scheduled_receipt(po_id) -> purchase_order",
+      "rows_checked": 4059,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:projected_balance",
+      "category": "schema",
+      "description": "projected_balance: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 21216,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:projected_balance",
+      "category": "primary_key",
+      "description": "projected_balance.pab_id unique and not null",
+      "rows_checked": 21216,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:projected_balance",
+      "category": "duplicate",
+      "description": "projected_balance natural key ['sku_id', 'location_id', 'week_id'] unique",
+      "rows_checked": 21216,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:projected_balance.sku_id+location_id->sku_location",
+      "category": "foreign_key",
+      "description": "projected_balance(sku_id, location_id) -> sku_location",
+      "rows_checked": 21216,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:projected_balance.week_id->calendar_week",
+      "category": "foreign_key",
+      "description": "projected_balance(week_id) -> calendar_week",
+      "rows_checked": 21216,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:shortage",
+      "category": "schema",
+      "description": "shortage: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 322,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:shortage",
+      "category": "primary_key",
+      "description": "shortage.shortage_id unique and not null",
+      "rows_checked": 322,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:shortage.sku_id+location_id->sku_location",
+      "category": "foreign_key",
+      "description": "shortage(sku_id, location_id) -> sku_location",
+      "rows_checked": 322,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:shortage_cause",
+      "category": "schema",
+      "description": "shortage_cause: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 629,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:shortage_cause",
+      "category": "primary_key",
+      "description": "shortage_cause.shortage_cause_id unique and not null",
+      "rows_checked": 629,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:shortage_cause",
+      "category": "duplicate",
+      "description": "shortage_cause natural key ['shortage_id', 'cause_seq'] unique",
+      "rows_checked": 629,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:shortage_cause.shortage_id->shortage",
+      "category": "foreign_key",
+      "description": "shortage_cause(shortage_id) -> shortage",
+      "rows_checked": 629,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:mitigation_option",
+      "category": "schema",
+      "description": "mitigation_option: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 996,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:mitigation_option",
+      "category": "primary_key",
+      "description": "mitigation_option.mitigation_id unique and not null",
+      "rows_checked": 996,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:mitigation_option.shortage_id->shortage",
+      "category": "foreign_key",
+      "description": "mitigation_option(shortage_id) -> shortage",
+      "rows_checked": 996,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:mitigation_option.supplier_id->supplier",
+      "category": "foreign_key",
+      "description": "mitigation_option(supplier_id) -> supplier",
+      "rows_checked": 996,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:mitigation_option.po_id->purchase_order",
+      "category": "foreign_key",
+      "description": "mitigation_option(po_id) -> purchase_order",
+      "rows_checked": 996,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:mitigation_option.source_location_id->location",
+      "category": "foreign_key",
+      "description": "mitigation_option(source_location_id) -> location",
+      "rows_checked": 996,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:mitigation_option.substitute_sku_id->sku",
+      "category": "foreign_key",
+      "description": "mitigation_option(substitute_sku_id) -> sku",
+      "rows_checked": 996,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:mitigation_option.substitution_id->sku_substitute",
+      "category": "foreign_key",
+      "description": "mitigation_option(substitution_id) -> sku_substitute",
+      "rows_checked": 996,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:rejected_mitigation",
+      "category": "schema",
+      "description": "rejected_mitigation: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 191,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:rejected_mitigation",
+      "category": "primary_key",
+      "description": "rejected_mitigation.rejection_id unique and not null",
+      "rows_checked": 191,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:rejected_mitigation.shortage_id->shortage",
+      "category": "foreign_key",
+      "description": "rejected_mitigation(shortage_id) -> shortage",
+      "rows_checked": 191,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:detected_issue",
+      "category": "schema",
+      "description": "detected_issue: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 47,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:detected_issue",
+      "category": "primary_key",
+      "description": "detected_issue.issue_id unique and not null",
+      "rows_checked": 47,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:supplier_capacity_utilization",
+      "category": "schema",
+      "description": "supplier_capacity_utilization: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 2600,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:supplier_capacity_utilization",
+      "category": "primary_key",
+      "description": "supplier_capacity_utilization.supplier_capacity_id unique and not null",
+      "rows_checked": 2600,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:supplier_capacity_utilization.supplier_capacity_id->supplier_capacity",
+      "category": "foreign_key",
+      "description": "supplier_capacity_utilization(supplier_capacity_id) -> supplier_capacity",
+      "rows_checked": 2600,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "schema:production_capacity_utilization",
+      "category": "schema",
+      "description": "production_capacity_utilization: columns, required, types, patterns, enums, ranges",
+      "rows_checked": 104,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "pk:production_capacity_utilization",
+      "category": "primary_key",
+      "description": "production_capacity_utilization.production_capacity_id unique and not null",
+      "rows_checked": 104,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:production_capacity_utilization.production_capacity_id->production_capacity",
+      "category": "foreign_key",
+      "description": "production_capacity_utilization(production_capacity_id) -> production_capacity",
+      "rows_checked": 104,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "date:calendar",
+      "category": "date_ordering",
+      "description": "calendar weeks consecutive, end = start + 6",
+      "rows_checked": 52,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "lifecycle:sku",
+      "category": "lifecycle",
+      "description": "PHASE_OUT iff effective_to; effective_to >= effective_from; NEW starts in horizon",
+      "rows_checked": 300,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "date:demand_in_sku_window",
+      "category": "date_ordering",
+      "description": "forecast weeks inside SKU effective window; FG only; uom = base_uom",
+      "rows_checked": 17366,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "arithmetic:lead_time",
+      "category": "arithmetic",
+      "description": "total = production + transit; expedite <= transit; versions contiguous",
+      "rows_checked": 206,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "date:purchase_order",
+      "category": "date_ordering",
+      "description": "order <= ship <= promised; expected = promised + delay; actual iff RECEIVED and < as-of",
+      "rows_checked": 1009,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "arithmetic:po_lead_time",
+      "category": "arithmetic",
+      "description": "PO uses the lane version effective at order_date; ship = order + production lead; promised = order + total lead",
+      "rows_checked": 1009,
+      "violations": 3,
+      "expected_labelled": 3,
+      "unexpected": 0,
+      "status": "PASS_WITH_LABELLED_EXCEPTIONS"
+    },
+    {
+      "check": "arithmetic:po_line",
+      "category": "arithmetic",
+      "description": "base_qty = order_qty * factor; line_value = base_qty * unit_cost; order_qty <= requested; MOQ and multiple",
+      "rows_checked": 4846,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "uom:po_line",
+      "category": "uom",
+      "description": "order UoM and factor agree with supplier terms / SKU master",
+      "rows_checked": 4846,
+      "violations": 3,
+      "expected_labelled": 3,
+      "unexpected": 0,
+      "status": "PASS_WITH_LABELLED_EXCEPTIONS"
+    },
+    {
+      "check": "cross:po_line_terms",
+      "category": "cross_entity",
+      "description": "line supplier_sku belongs to the PO supplier and the line SKU",
+      "rows_checked": 4846,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "arithmetic:po_totals",
+      "category": "arithmetic",
+      "description": "header line_count / total_base_qty / total_value = sum of lines",
+      "rows_checked": 1009,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "lifecycle:po_events",
+      "category": "lifecycle",
+      "description": "events start with CREATED, allowed transitions, chained statuses, increasing timestamps < as-of, status = last event, delay = sum of delays",
+      "rows_checked": 1009,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "policy:on_hold_supplier",
+      "category": "policy",
+      "description": "no open PO to an ON_HOLD supplier",
+      "rows_checked": 1009,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "capacity:supplier_source",
+      "category": "capacity",
+      "description": "sum(open PO base_qty by supplier ship week) <= capacity_units",
+      "rows_checked": 2600,
+      "violations": 3,
+      "expected_labelled": 3,
+      "unexpected": 0,
+      "status": "PASS_WITH_LABELLED_EXCEPTIONS"
+    },
+    {
+      "check": "capacity:production",
+      "category": "capacity",
+      "description": "production: planned <= required, multiple of batch, plant total <= capacity",
+      "rows_checked": 1477,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "cross:bom",
+      "category": "cross_entity",
+      "description": "BOM parent is MAKE, component is COMPONENT, uom = component base",
+      "rows_checked": 87,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "policy:substitute_approval",
+      "category": "policy",
+      "description": "substitute links are APPROVED (with approver + date); not self; same base UoM",
+      "rows_checked": 14,
+      "violations": 3,
+      "expected_labelled": 3,
+      "unexpected": 0,
+      "status": "PASS_WITH_LABELLED_EXCEPTIONS"
+    },
+    {
+      "check": "derived:primary_supplier",
+      "category": "derived",
+      "description": "sku_location.primary_supplier_id = supplier_sku priority 1",
+      "rows_checked": 408,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "derived:abc_class",
+      "category": "derived",
+      "description": "abc_class recomputed from annual demand value (Pareto 80/15/5)",
+      "rows_checked": 300,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "derived:safety_stock",
+      "category": "derived",
+      "description": "safety_stock_qty = ceil(z(ABC) * 0.3 * mean weekly demand * sqrt(LT weeks))",
+      "rows_checked": 408,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "duplicate:inventory_in_transit",
+      "category": "duplicate",
+      "description": "at most one IN_TRANSIT row per PO line; one ON_HAND row per SKU-location",
+      "rows_checked": 632,
+      "violations": 3,
+      "expected_labelled": 3,
+      "unexpected": 0,
+      "status": "PASS_WITH_LABELLED_EXCEPTIONS"
+    },
+    {
+      "check": "duplicate:exact_rows",
+      "category": "duplicate",
+      "description": "no two input rows identical apart from their primary key",
+      "rows_checked": 31173,
+      "violations": 3,
+      "expected_labelled": 3,
+      "unexpected": 0,
+      "status": "PASS_WITH_LABELLED_EXCEPTIONS"
+    },
+    {
+      "check": "cross:inventory",
+      "category": "cross_entity",
+      "description": "snapshot = as-of; uom = base; IN_TRANSIT rows reference an IN_TRANSIT PO line for the same SKU and location",
+      "rows_checked": 632,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "leakage:ground_truth",
+      "category": "leakage",
+      "description": "no label columns in inputs; ground truth not stored with inputs",
+      "rows_checked": 17,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "reconciliation:pab_weekly",
+      "category": "reconciliation",
+      "description": "closing = opening + receipts + production - demand - dependent; opening(w) = closing(w-1); flags consistent",
+      "rows_checked": 21216,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "reconciliation:pab_sources",
+      "category": "reconciliation",
+      "description": "PAB inputs reconcile to inventory, forecast, production, BOM explosion and counted scheduled receipts",
+      "rows_checked": 21216,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "reconciliation:scheduled_receipt",
+      "category": "reconciliation",
+      "description": "counted receipts are open PO lines; unadjusted lines keep source qty/date",
+      "rows_checked": 4059,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "reconciliation:shortage",
+      "category": "reconciliation",
+      "description": "shortages = maximal runs of negative PAB; qty = peak deficit; ranks unique",
+      "rows_checked": 322,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "explainability:shortage_causes",
+      "category": "explainability",
+      "description": "every shortage has >= 1 cause; contributions <= shortage qty; primary cause = cause 1 or DEMAND_EXCEEDS_SUPPLY",
+      "rows_checked": 322,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "policy:mitigation",
+      "category": "policy",
+      "description": "options respect approval, supplier status, MOQ/multiple, lead time, arrival before shortage end; covered/residual/fill reconcile; one recommended per shortage",
+      "rows_checked": 996,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "explainability:tradeoffs",
+      "category": "explainability",
+      "description": "every shortage shows >= 2 alternatives with cost and service metrics, or backorder plus logged rejections explaining why nothing else is feasible",
+      "rows_checked": 322,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "capacity:mitigation_supplier",
+      "category": "capacity",
+      "description": "planned load + mitigation reservations <= supplier capacity; reservations = recommended new-PO quantities",
+      "rows_checked": 2600,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "capacity:mitigation_plant",
+      "category": "capacity",
+      "description": "planned production + reservations <= plant capacity",
+      "rows_checked": 104,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "capacity:mitigation_stock",
+      "category": "capacity",
+      "description": "transfers and substitutes never take a source below safety stock",
+      "rows_checked": 322,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "fk:sqlite_enforced",
+      "category": "foreign_key",
+      "description": "load all tables into SQLite and run PRAGMA foreign_key_check",
+      "rows_checked": 61337,
+      "violations": 0,
+      "expected_labelled": 0,
+      "unexpected": 0,
+      "status": "PASS"
+    }
+  ]
+}

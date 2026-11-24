@@ -18,8 +18,8 @@ from .calendar import week_id_for_date
 
 POLICY = {
     "frozen_weeks": 2,                 # production cannot be changed inside this fence
-    "spike_ratio": 2.2,                # forecast >= ratio * local median => spike
-    "spike_min_excess": 5,
+    "spike_ratio": 2.0,                # forecast >= ratio * local median => spike
+    "spike_min_excess": 8,
     "spike_window": 9,
     "constrained_supplier_util": 0.90,
     "constrained_supplier_min_weeks": 3,
@@ -63,6 +63,10 @@ def _none(v):
     except (TypeError, ValueError):
         pass
     return v
+
+
+def _s(v) -> str:
+    return v if isinstance(v, str) else ""
 
 
 def _d(s) -> date:
@@ -164,6 +168,8 @@ def build_scheduled_receipts(st: PlanState) -> pd.DataFrame:
                          planning_receipt_date=receipt.isoformat(), ship_week_index=ship_w,
                          receipt_week_index=rw, adjustment_codes="|".join(codes) or None,
                          planning_ship_date=ship.isoformat(), unit_cost=float(r.unit_cost),
+                         supplier_cut_base=0 if math.isnan(factor) else int(round(
+                             (int(r.requested_qty) - int(r.order_qty)) * factor)),
                          lead_time_id=r.lead_time_id,
                          counted_in_plan=bool(open_line and plan_base > 0 and rw < ctx.W),
                          created_at=r.created_at, line_number=int(r.line_number),
@@ -293,7 +299,8 @@ def local_baseline(D: np.ndarray, active: np.ndarray, window: int) -> np.ndarray
 
 def detect_spikes(st: PlanState, sl: pd.DataFrame, D: np.ndarray, active: np.ndarray):
     base = local_baseline(D, active, POLICY["spike_window"])
-    flag = (D >= POLICY["spike_ratio"] * np.maximum(base, 1)) & (D - base >= POLICY["spike_min_excess"]) & active
+    min_excess = np.maximum(POLICY["spike_min_excess"], 3 * np.sqrt(np.maximum(base, 0)))  # 3 sigma (Poisson)
+    flag = (D >= POLICY["spike_ratio"] * np.maximum(base, 1)) & (D - base >= min_excess) & active
     ctx = st.ctx
     for i, w in zip(*np.nonzero(flag)):
         s, l = sl.sku_id.iat[i], sl.location_id.iat[i]
@@ -320,11 +327,13 @@ def build_matrices(st: PlanState, sr: pd.DataFrame, on_hand: pd.Series):
     D[ii, ww] = fd.forecast_qty.astype(np.int64).to_numpy()
     active[ii, ww] = True
     P = np.zeros((n, W), dtype=np.int64)
+    PREQ = np.zeros((n, W), dtype=np.int64)
     pp = t["production_plan"]
     if len(pp):
         ii = np.array([key[(a, b)] for a, b in zip(pp.sku_id, pp.location_id)])
         ww = np.array([wpos[w] for w in pp.week_id])
         np.add.at(P, (ii, ww), pp.planned_qty.astype(np.int64).to_numpy())
+        np.add.at(PREQ, (ii, ww), pp.required_qty.astype(np.int64).to_numpy())
     DD = dependent_demand_matrix(t, key, wpos, n, W)
     R = np.zeros((n, W), dtype=np.int64)
     cnt = sr[sr.counted_in_plan]
@@ -334,7 +343,7 @@ def build_matrices(st: PlanState, sr: pd.DataFrame, on_hand: pd.Series):
     O = np.array([int(on_hand.get((a, b), 0)) for a, b in zip(sl.sku_id, sl.location_id)], dtype=np.int64)
     closing = O[:, None] + np.cumsum(R + P - D - DD, axis=1)
     SS = sl.safety_stock_qty.astype(np.int64).to_numpy()
-    return dict(sl=sl, key=key, D=D, DD=DD, P=P, R=R, O=O, closing=closing, SS=SS, active=active)
+    return dict(sl=sl, key=key, D=D, DD=DD, P=P, PREQ=PREQ, R=R, O=O, closing=closing, SS=SS, active=active)
 
 
 def dependent_demand_matrix(t, key, wpos, n, W) -> np.ndarray:
@@ -386,27 +395,39 @@ def plant_capacity(st: PlanState, M: dict) -> dict:
     for r in t["production_capacity"].itertuples():
         cap[pidx[r.location_id], wpos[r.week_id]] = r.capacity_units
     planned = np.zeros_like(cap)
+    required = np.zeros_like(cap)
     pp = t["production_plan"]
     for r in pp.itertuples():
         planned[pidx[r.location_id], wpos[r.week_id]] += r.planned_qty
-    return dict(plants=plants, pidx=pidx, cap=cap, planned=planned)
+        required[pidx[r.location_id], wpos[r.week_id]] += r.required_qty
+    return dict(plants=plants, pidx=pidx, cap=cap, planned=planned, required=required)
 
 
-def screen_constraints(st: PlanState, S: dict, PC: dict):
+def screen_constraints(st: PlanState, S: dict, PC: dict, sr: pd.DataFrame):
+    """Flag suppliers/plants whose capacity binds: quantities were cut below what was requested/required,
+    or utilisation stays very high for several weeks."""
     util = np.divide(S["load"], S["cap"], out=np.zeros_like(S["load"]), where=S["cap"] > 0)
+    cut = sr[(sr.supplier_cut_base > 0) & sr.po_status.isin(["PLANNED", "CONFIRMED"])]
+    cut_weeks = cut.groupby("supplier_id").ship_week_index.nunique().to_dict()
+    cut_qty = cut.groupby("supplier_id").supplier_cut_base.sum().to_dict()
     for s, i in S["sidx"].items():
         weeks = np.flatnonzero(util[i] >= POLICY["constrained_supplier_util"])
-        if len(weeks) >= POLICY["constrained_supplier_min_weeks"]:
+        n_cut = int(cut_weeks.get(s, 0))
+        if n_cut >= 1 or len(weeks) >= POLICY["constrained_supplier_min_weeks"]:
             add_issue(st, "CONSTRAINED_SUPPLIER", "LOW", "supplier", s, "FLAG_CONSTRAINED_SUPPLIER",
-                      f"utilisation >= {POLICY['constrained_supplier_util']:.0%} in {len(weeks)} weeks; "
-                      "little headroom for new orders", sup=s, impact=len(weeks))
+                      f"confirmed quantities cut by {int(cut_qty.get(s, 0))} units in {n_cut} ship week(s); "
+                      f"utilisation >= {POLICY['constrained_supplier_util']:.0%} in {len(weeks)} week(s)",
+                      sup=s, impact=int(cut_qty.get(s, 0)))
     putil = np.divide(PC["planned"], PC["cap"], out=np.zeros_like(PC["planned"]), where=PC["cap"] > 0)
     for p, i in PC["pidx"].items():
+        gap_weeks = np.flatnonzero(PC["required"][i] > PC["planned"][i])
         weeks = np.flatnonzero(putil[i] >= POLICY["constrained_plant_util"])
-        if len(weeks) >= POLICY["constrained_plant_min_weeks"]:
+        if len(gap_weeks) >= POLICY["constrained_plant_min_weeks"] or len(weeks) >= POLICY["constrained_plant_min_weeks"]:
             add_issue(st, "CONSTRAINED_PLANT", "LOW", "location", p, "FLAG_CONSTRAINED_PLANT",
-                      f"production utilisation >= {POLICY['constrained_plant_util']:.0%} in {len(weeks)} weeks",
-                      loc=p, impact=len(weeks))
+                      f"planned production below requirement in {len(gap_weeks)} week(s) "
+                      f"({int((PC['required'][i] - PC['planned'][i]).sum())} units); utilisation >= "
+                      f"{POLICY['constrained_plant_util']:.0%} in {len(weeks)} week(s)",
+                      loc=p, impact=int((PC["required"][i] - PC["planned"][i]).sum()))
     S["util"], PC["util"] = util, putil
 
 
@@ -459,11 +480,13 @@ def detect_shortages(st: PlanState, M: dict, sr: pd.DataFrame, S: dict, PC: dict
         else:
             value = qty * float(info.unit_price)
         prim = _none(sl.primary_supplier_id.iat[i])
+        # first week a normal replenishment action can land: order today + lead time (purchase) or the end
+        # of the frozen production fence (make). Shortages starting earlier are "within lead time".
         if method == "PRODUCTION":
-            lt_weeks = 1
+            lt_weeks = POLICY["frozen_weeks"]
         else:
             lane = lanes.get((prim, loc))
-            lt_weeks = math.ceil(lane["total_lead_days"] / 7) if lane else 0
+            lt_weeks = ctx.widx(ctx.as_of + timedelta(days=int(lane["total_lead_days"]))) if lane else 0
         cum = lambda A, upto: int(A[i, :upto + 1].sum())
         O = int(M["O"][i])
         cs = []   # (code, qty, evidence_type, evidence_ids, explanation)
@@ -484,33 +507,31 @@ def detect_shortages(st: PlanState, M: dict, sr: pd.DataFrame, S: dict, PC: dict
             cs.append(("TRANSPORT_DELAY", min(qty, q), "purchase_order", "|".join(sorted({r.po_id for r in dl})),
                        f"{len(dl)} inbound line(s) ({q} units) delayed past the shortage start by "
                        f"{max(r.transport_delay_days for r in dl)} days max"))
-        # --- capacity deferral (engine correction)
-        cd = [r for r in lines if r.adjustment_codes and "CAPACITY_DEFERRED" in r.adjustment_codes
+        # --- supplier capacity: confirmed < requested, or deferred by the engine's capacity check
+        cut = [r for r in lines if r.counted_in_plan and r.supplier_cut_base > 0 and r.promised_week <= e]
+        cd = [r for r in lines if "CAPACITY_DEFERRED" in _s(r.adjustment_codes)
               and r.receipt_week_index >= s]
-        if cd:
-            q = sum(r.planning_base_qty for r in cd)
-            cs.append(("SUPPLIER_CAPACITY_CONSTRAINT", min(qty, q), "purchase_order",
-                       "|".join(sorted({r.po_id for r in cd})),
-                       f"{q} units deferred because the supplier week was over capacity"))
-        elif prim and method != "PRODUCTION":
-            si = S["sidx"][prim]
-            weeks = [w for w in range(0, min(e + 1, W)) if S["util"][si, w] >= POLICY["constrained_supplier_util"]]
-            if weeks:
-                head = int(max(0, (S["cap"][si, :e + 1] - S["load"][si, :e + 1]).clip(min=0).sum()))
-                cs.append(("SUPPLIER_CAPACITY_CONSTRAINT", max(0, qty - head), "supplier_capacity",
-                           "|".join(f"SCAP-{prim}-{ctx.week_ids[w]}" for w in weeks[:6]),
-                           f"primary supplier {prim} at >= {POLICY['constrained_supplier_util']:.0%} capacity in "
-                           f"{len(weeks)} week(s) before/within the shortage; headroom {head} units"))
-        # --- production capacity
+        if cut or cd:
+            q = sum(r.supplier_cut_base for r in cut) + sum(r.planning_base_qty for r in cd)
+            parts = []
+            if cut:
+                parts.append(f"supplier confirmed {sum(r.supplier_cut_base for r in cut)} units less than requested "
+                             f"on {len(cut)} line(s) (weekly capacity)")
+            if cd:
+                parts.append(f"{sum(r.planning_base_qty for r in cd)} units deferred because the supplier week was "
+                             "over capacity")
+            cs.append(("SUPPLIER_CAPACITY_CONSTRAINT", min(qty, q), "purchase_order_line",
+                       "|".join(sorted({r.po_line_id for r in cut + cd})), "; ".join(parts)))
+        # --- production capacity: planned < required
         if method == "PRODUCTION":
-            pi = PC["pidx"][loc]
-            weeks = [w for w in range(0, e + 1) if PC["util"][pi, w] >= POLICY["constrained_plant_util"]]
-            if weeks:
-                head = int((PC["cap"][pi, :e + 1] - PC["planned"][pi, :e + 1]).clip(min=0).sum())
-                cs.append(("PRODUCTION_CAPACITY_CONSTRAINT", max(0, qty - head), "production_capacity",
-                           "|".join(f"PCAP-{loc}-{ctx.week_ids[w]}" for w in weeks[:6]),
-                           f"plant {loc} at >= {POLICY['constrained_plant_util']:.0%} capacity in {len(weeks)} "
-                           f"week(s); remaining headroom {head} units"))
+            gap = int((M["PREQ"][i, :e + 1] - M["P"][i, :e + 1]).sum())
+            if gap > 0:
+                pi = PC["pidx"][loc]
+                weeks = [w for w in range(0, e + 1) if M["PREQ"][i, w] > M["P"][i, w]]
+                cs.append(("PRODUCTION_CAPACITY_CONSTRAINT", min(qty, gap), "production_capacity",
+                           "|".join(f"PCAP-{loc}-{ctx.week_ids[w]}" for w in weeks[:8]),
+                           f"plant {loc} capacity cut planned production {gap} units below requirement in "
+                           f"{len(weeks)} week(s)"))
         # --- dependent demand (components)
         if method == "DEPENDENT_PURCHASE":
             dd = int(M["DD"][i, s:e + 1].sum())
@@ -528,14 +549,14 @@ def detect_shortages(st: PlanState, M: dict, sr: pd.DataFrame, S: dict, PC: dict
             cs.append(("PO_CANCELLED", min(qty, q), "purchase_order", "|".join(sorted({r.po_id for r in cx})),
                        f"{len(cx)} cancelled line(s) would have delivered {q} units"))
         # --- lead-time correction
-        lc = [r for r in lines if r.adjustment_codes and "LEAD_TIME_RECALCULATED" in r.adjustment_codes
+        lc = [r for r in lines if "LEAD_TIME_RECALCULATED" in _s(r.adjustment_codes)
               and r.promised_week <= e and r.receipt_week_index >= s]
         if lc:
             q = sum(r.planning_base_qty for r in lc)
             cs.append(("LEAD_TIME_CORRECTION", min(qty, q), "purchase_order", "|".join(sorted({r.po_id for r in lc})),
                        f"{q} units recorded as arriving without lead time; recalculated arrival is later"))
         # --- UoM exclusion
-        uc = [r for r in lines if r.adjustment_codes and "UOM_UNCONVERTIBLE_EXCLUDED" in r.adjustment_codes
+        uc = [r for r in lines if "UOM_UNCONVERTIBLE_EXCLUDED" in _s(r.adjustment_codes)
               and r.promised_week <= e]
         if uc:
             q = sum(r.source_base_qty for r in uc)
@@ -545,8 +566,8 @@ def detect_shortages(st: PlanState, M: dict, sr: pd.DataFrame, S: dict, PC: dict
         if s < lt_weeks:
             gap = -int(closing[i, s])
             cs.append(("INSUFFICIENT_OPENING_STOCK", min(qty, gap), "inventory", None,
-                       f"opening stock {O} cannot cover demand until replenishment lead time "
-                       f"({lt_weeks} week(s)) elapses"))
+                       f"opening stock {O} cannot cover demand before a new order/production change can land "
+                       f"(week index {lt_weeks})"))
         # --- no supply after start
         if int(M["R"][i, s:].sum() + M["P"][i, s:].sum()) == 0:
             cs.append(("NO_SCHEDULED_SUPPLY", qty, "purchase_order", None,
@@ -556,7 +577,8 @@ def detect_shortages(st: PlanState, M: dict, sr: pd.DataFrame, S: dict, PC: dict
                      f"{cum(M['P'], s)} - demand {cum(M['D'], s)} - dependent demand {cum(M['DD'], s)} = "
                      f"{int(closing[i, s])}; peak deficit {qty} in {ctx.week_ids[peak_w]}")
         cs.append(("DEMAND_EXCEEDS_SUPPLY", qty, "projected_balance",
-                   f"PAB-{sku_id}-{loc}-{ctx.week_ids[s]}|PAB-{sku_id}-{loc}-{ctx.week_ids[peak_w]}",
+                   "|".join(dict.fromkeys([f"PAB-{sku_id}-{loc}-{ctx.week_ids[s]}",
+                                           f"PAB-{sku_id}-{loc}-{ctx.week_ids[peak_w]}"])),
                    "cumulative demand exceeds available supply: " + base_expl))
         primary = cs[0][0] if cs[0][1] > 0 or len(cs) == 1 else cs[-1][0]
         if cs[0][1] == 0:
@@ -612,7 +634,7 @@ def run_planning(t: dict[str, pd.DataFrame]) -> PlanState:
     M = build_matrices(st, sr, on_hand)
     spike, spike_base = detect_spikes(st, M["sl"], M["D"], M["active"])
     PC = plant_capacity(st, M)
-    screen_constraints(st, S, PC)
+    screen_constraints(st, S, PC, sr)
     recs, causes = detect_shortages(st, M, sr, S, PC, spike, spike_base)
     sh = prioritise(recs)
     cause_rows = []

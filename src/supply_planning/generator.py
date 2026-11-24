@@ -7,7 +7,7 @@ Generation order (parents before children):
     -> supplier_capacity -> inventory -> sku_substitute
 
 Hidden scenario drivers (demand spikes, constrained suppliers/plant) are
-returned separately so they can only ever reach ground_truth.
+returned separately so they only ever reach the separate label file.
 """
 from __future__ import annotations
 
@@ -315,7 +315,7 @@ class BaselineGenerator:
         n, W = len(fg), self.W
         cats = self.sku_info.loc[fg.sku_id, "category"].to_numpy()
         loc_factor = {l: float(np.exp(r.normal(0, 0.3))) for l in self.t["location"].location_id}
-        mu = np.exp(np.array([r.normal(CATEGORY_DEMAND_LOG[cat], 0.8) for cat in cats]))
+        mu = np.exp(np.array([r.normal(CATEGORY_DEMAND_LOG[cat], 1.0) for cat in cats]))
         mu *= np.array([loc_factor[l] for l in fg.location_id])
         mu *= np.where(fg.planning_method == "PRODUCTION", 3.0, 1.0)
         w = np.arange(W)
@@ -325,10 +325,13 @@ class BaselineGenerator:
         trend = 1 + r.normal(0.001, 0.003, n)[:, None] * w[None, :]
         expected = mu[:, None] * season * np.clip(trend, 0.5, None)
         mask = self.active_mask(fg.sku_id.to_numpy())
-        bias = np.clip(r.normal(0, 0.05, n), -0.12, 0.12)
-        plan_basis = expected * (1 + bias)[:, None] * mask
         noisy = expected * np.exp(r.normal(0, 0.12, (n, W)))
         fc = np.where(noisy < 5, r.poisson(noisy), np.round(noisy)).astype(np.int64)
+        # Open POs / production were planned on the previous forecast release: identical to the
+        # current one except (a) it has no spikes and (b) ~20 % of SKU-locations were revised since.
+        revised = r.random(n) < 0.20
+        bias = np.where(revised, np.clip(r.normal(0, 0.10, n), -0.25, 0.25), 0.0)
+        plan_basis = fc * (1 + bias)[:, None] * mask
         # demand spikes (hidden scenario driver; plan_basis does NOT include them)
         spikes = []
         n_spike = max(1, round(n * self.cfg.share_spike_sku_locations))
@@ -338,7 +341,7 @@ class BaselineGenerator:
                 continue
             for wk in r.choice(active_weeks, min(len(active_weeks), int(r.integers(1, 3))), replace=False):
                 mult = round(float(r.uniform(2.5, 4.5)), 2)
-                base = max(int(fc[i, wk]), int(math.ceil(expected[i, wk])), 4)
+                base = max(int(fc[i, wk]), int(math.ceil(expected[i, wk])), 6)
                 fc[i, wk] = int(round(base * mult))
                 spikes.append((fg.sku_id[i], fg.location_id[i], int(wk), mult, base))
         fc = fc * mask
@@ -388,6 +391,7 @@ class BaselineGenerator:
                 proj += q - D[w]
             self.make_opening[i], self.make_batch[i], self.make_ss[i] = opening, batch, ss
         plant_of = fg.location_id.to_numpy()
+        self.required_prod = prod.copy()
         loads = {p: prod[plant_of == p].sum(axis=0) for p in self.plants}
         constrained = self.plants[-1] if len(self.plants) >= 2 else None
         cap_rows = []
@@ -409,13 +413,15 @@ class BaselineGenerator:
                 cap_rows.append(dict(production_capacity_id=f"PCAP-{p}-{self.week_ids[w]}", location_id=p,
                                      week_id=self.week_ids[w], capacity_units=int(caps[w])))
         self.hidden["constrained_plant"] = constrained
+        required = self.required_prod
         self.t["production_capacity"] = pd.DataFrame(cap_rows)
         self.production = prod
         rows = []
         for i in make_rows:
-            for w in np.flatnonzero(prod[i] > 0):
+            for w in np.flatnonzero(required[i] > 0):
                 rows.append(dict(sku_id=fg.sku_id[i], location_id=fg.location_id[i], week_id=self.week_ids[w],
-                                 week_index=int(w), planned_qty=int(prod[i, w]), batch_size=self.make_batch[i],
+                                 week_index=int(w), required_qty=int(required[i, w]), planned_qty=int(prod[i, w]),
+                                 batch_size=self.make_batch[i],
                                  status="FIRM" if w < FROZEN_WEEKS else "PLANNED"))
         pp = pd.DataFrame(rows).sort_values(["week_index", "location_id", "sku_id"]).reset_index(drop=True)
         pp.insert(0, "production_plan_id", [f"PP-{self.year}-{i + 1:06d}" for i in range(len(pp))])
@@ -622,7 +628,7 @@ class BaselineGenerator:
             for ln, (sku_id, pq) in enumerate(sorted(h["lines"]), start=1):
                 t = self.terms[(h["supplier_id"], sku_id)]
                 line_rows.append(dict(po_line_id=ids.po_line_id(pid, ln), po_id=pid, line_number=ln, sku_id=sku_id,
-                                      supplier_sku_id=t["supplier_sku_id"], order_qty=int(pq),
+                                      supplier_sku_id=t["supplier_sku_id"], requested_qty=int(pq), order_qty=int(pq),
                                       order_uom=t["purchase_uom"], uom_conversion_factor=t["uom_conversion_factor"],
                                       base_uom=self.sku_info.at[sku_id, "base_uom"], unit_cost=t["unit_cost"],
                                       min_order_qty=t["min_order_qty"], order_multiple=t["order_multiple"]))
@@ -665,8 +671,8 @@ class BaselineGenerator:
                 ev.append(["CONFIRMED", "PLANNED", "CONFIRMED", confirm_dt, "SUPPLIER", 0, None])
                 status = "CONFIRMED"
             ship_dt = datetime(sd.year, sd.month, sd.day, 14, 0)
-            cancel = (status in ("PLANNED", "CONFIRMED") and ship_dt >= as_of_dt
-                      and r.random() < c.share_cancelled * 1.4)
+            cancel = (status in ("PLANNED", "CONFIRMED") and ship_dt >= as_of_dt and len(h["lines"]) <= 2
+                      and r.random() < c.share_cancelled)
             if cancel:
                 lo = max(ev[-1][3] + timedelta(hours=1), as_of_dt - timedelta(days=14))
                 hi = as_of_dt - timedelta(hours=1)
@@ -730,7 +736,7 @@ class BaselineGenerator:
         for s in sup_ids:
             L = load[s]
             if s in constrained:
-                base = L[L > 0].mean() * r.uniform(0.9, 1.0)
+                base = L[L > 0].mean() * r.uniform(0.95, 1.1)
             elif L.any():
                 base = L.max() * r.uniform(1.25, 2.0)
             else:
@@ -759,7 +765,8 @@ class BaselineGenerator:
         pl = self.po_lines
         pl["base_qty"] = (pl.order_qty * pl.uom_conversion_factor).round().astype(np.int64)
         pl["line_value"] = (pl.base_qty * pl.unit_cost).round(2)
-        line_cols = ["po_line_id", "po_id", "line_number", "sku_id", "supplier_sku_id", "order_qty", "order_uom",
+        line_cols = ["po_line_id", "po_id", "line_number", "sku_id", "supplier_sku_id", "requested_qty", "order_qty",
+                     "order_uom",
                      "uom_conversion_factor", "base_qty", "base_uom", "unit_cost", "line_value"]
         self.t["purchase_order_line"] = pl[line_cols].copy()
         agg = pl.groupby("po_id").agg(line_count=("po_line_id", "size"), total_base_qty=("base_qty", "sum"),
