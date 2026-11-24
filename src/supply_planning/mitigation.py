@@ -312,7 +312,7 @@ def generate_mitigations(st, sh: pd.DataFrame, M: dict, sr: pd.DataFrame, S: dic
                     "NO_BENEFIT", "option covers no shortage quantity")
                 continue
             a = o.get("arrival_week_index")
-            late = max(0, int(a) - s) if a is not None else int(r.duration_weeks)
+            late = max(0, int(a) - s) if a is not None else int(getattr(r, "duration_weeks", r.end_week_index - r.start_week_index + 1))
             fill = covered / Q
             service = fill * max(0.0, 1 - COSTS["lateness_penalty_per_week"] * late) if covered else 0.0
             o.update(covered_qty=covered, residual_shortage_qty=Q - covered, fill_rate_pct=round(100 * fill, 2),
