@@ -1,0 +1,418 @@
+{
+  "detection_metrics": [
+    {
+      "issue_type": "INBOUND_DOUBLE_COUNT",
+      "category": "EDGE_CASE",
+      "labelled": 3,
+      "detected": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "decision_accuracy": 1.0
+    },
+    {
+      "issue_type": "SUBSTITUTE_NOT_APPROVED",
+      "category": "EDGE_CASE",
+      "labelled": 3,
+      "detected": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "decision_accuracy": 1.0
+    },
+    {
+      "issue_type": "SUPPLIER_CAPACITY_EXCEEDED",
+      "category": "EDGE_CASE",
+      "labelled": 3,
+      "detected": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "decision_accuracy": 1.0
+    },
+    {
+      "issue_type": "SHORTAGE_WITHOUT_LEAD_TIME",
+      "category": "EDGE_CASE",
+      "labelled": 3,
+      "detected": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "decision_accuracy": 1.0
+    },
+    {
+      "issue_type": "UOM_MISMATCH",
+      "category": "EDGE_CASE",
+      "labelled": 3,
+      "detected": 3,
+      "true_positive": 3,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "decision_accuracy": 1.0
+    },
+    {
+      "issue_type": "DEMAND_SPIKE",
+      "category": "SCENARIO",
+      "labelled": 23,
+      "detected": 26,
+      "true_positive": 23,
+      "false_positive": 3,
+      "false_negative": 0,
+      "precision": 0.8846,
+      "recall": 1.0,
+      "decision_accuracy": 1.0
+    },
+    {
+      "issue_type": "CONSTRAINED_SUPPLIER",
+      "category": "SCENARIO",
+      "labelled": 5,
+      "detected": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "decision_accuracy": 1.0
+    },
+    {
+      "issue_type": "CONSTRAINED_PLANT",
+      "category": "SCENARIO",
+      "labelled": 1,
+      "detected": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "decision_accuracy": 1.0
+    }
+  ],
+  "edge_case_recall": 1.0,
+  "edge_case_precision": 1.0,
+  "edge_case_decision_accuracy": 1.0,
+  "edge_case_impact": [
+    {
+      "gt_id": "GT-000001",
+      "issue_type": "INBOUND_DOUBLE_COUNT",
+      "record_id": "INV-000630",
+      "naive_effect": "+48 phantom units of supply",
+      "engine_effect": "excluded (counted once)"
+    },
+    {
+      "gt_id": "GT-000002",
+      "issue_type": "INBOUND_DOUBLE_COUNT",
+      "record_id": "INV-000631",
+      "naive_effect": "+60 phantom units of supply",
+      "engine_effect": "excluded (counted once)"
+    },
+    {
+      "gt_id": "GT-000003",
+      "issue_type": "INBOUND_DOUBLE_COUNT",
+      "record_id": "INV-000632",
+      "naive_effect": "+65 phantom units of supply",
+      "engine_effect": "excluded (counted once)"
+    },
+    {
+      "gt_id": "GT-000004",
+      "issue_type": "SUBSTITUTE_NOT_APPROVED",
+      "record_id": "SUB-000012",
+      "naive_effect": "substitute stock would be offered as a mitigation",
+      "engine_effect": "rejected in 7 shortage evaluation(s); used in 0 options"
+    },
+    {
+      "gt_id": "GT-000005",
+      "issue_type": "SUBSTITUTE_NOT_APPROVED",
+      "record_id": "SUB-000013",
+      "naive_effect": "substitute stock would be offered as a mitigation",
+      "engine_effect": "rejected in 4 shortage evaluation(s); used in 0 options"
+    },
+    {
+      "gt_id": "GT-000006",
+      "issue_type": "SUBSTITUTE_NOT_APPROVED",
+      "record_id": "SUB-000014",
+      "naive_effect": "substitute stock would be offered as a mitigation",
+      "engine_effect": "rejected in 4 shortage evaluation(s); used in 0 options"
+    },
+    {
+      "gt_id": "GT-000007",
+      "issue_type": "SUPPLIER_CAPACITY_EXCEEDED",
+      "record_id": "SCAP-SUP-0036-2026W45",
+      "naive_effect": "receipt 2026-11-08 (committed 3816 > capacity 2910)",
+      "engine_effect": "receipt 2026-11-15 (CAPACITY_DEFERRED_1W)"
+    },
+    {
+      "gt_id": "GT-000008",
+      "issue_type": "SUPPLIER_CAPACITY_EXCEEDED",
+      "record_id": "SCAP-SUP-0013-2026W43",
+      "naive_effect": "receipt 2026-10-21 (committed 3032 > capacity 2330)",
+      "engine_effect": "receipt 2026-11-11 (CAPACITY_DEFERRED_3W)"
+    },
+    {
+      "gt_id": "GT-000009",
+      "issue_type": "SUPPLIER_CAPACITY_EXCEEDED",
+      "record_id": "SCAP-SUP-0019-2026W28",
+      "naive_effect": "receipt 2026-07-10 (committed 758 > capacity 580)",
+      "engine_effect": "receipt 2026-07-17 (CAPACITY_DEFERRED_1W)"
+    },
+    {
+      "gt_id": "GT-000010",
+      "issue_type": "SHORTAGE_WITHOUT_LEAD_TIME",
+      "record_id": "PO-2026-001004",
+      "naive_effect": "receipt 2025-12-31",
+      "engine_effect": "receipt 2026-01-20"
+    },
+    {
+      "gt_id": "GT-000011",
+      "issue_type": "SHORTAGE_WITHOUT_LEAD_TIME",
+      "record_id": "PO-2026-001005",
+      "naive_effect": "receipt 2025-12-30",
+      "engine_effect": "receipt 2026-02-08"
+    },
+    {
+      "gt_id": "GT-000012",
+      "issue_type": "SHORTAGE_WITHOUT_LEAD_TIME",
+      "record_id": "PO-2026-001006",
+      "naive_effect": "receipt 2025-12-31",
+      "engine_effect": "receipt 2026-01-14"
+    },
+    {
+      "gt_id": "GT-000013",
+      "issue_type": "UOM_MISMATCH",
+      "record_id": "PO-2026-001007-L01",
+      "naive_effect": "4 units",
+      "engine_effect": "96 units (UOM_CONVERTED)"
+    },
+    {
+      "gt_id": "GT-000014",
+      "issue_type": "UOM_MISMATCH",
+      "record_id": "PO-2026-001008-L01",
+      "naive_effect": "103 units",
+      "engine_effect": "0 units (UOM_UNCONVERTIBLE_EXCLUDED)"
+    },
+    {
+      "gt_id": "GT-000015",
+      "issue_type": "UOM_MISMATCH",
+      "record_id": "PO-2026-001009-L01",
+      "naive_effect": "6 units",
+      "engine_effect": "72 units (UOM_CONVERTED)"
+    }
+  ],
+  "planning_kpis": {
+    "sku_locations": 408,
+    "sku_locations_with_shortage": 115,
+    "shortage_episodes": 322,
+    "shortages_by_tier": {
+      "MEDIUM": 159,
+      "LOW": 83,
+      "HIGH": 64,
+      "CRITICAL": 16
+    },
+    "shortages_by_primary_cause": {
+      "SUPPLIER_CAPACITY_CONSTRAINT": 107,
+      "DEMAND_EXCEEDS_SUPPLY": 79,
+      "DEMAND_SPIKE": 45,
+      "PRODUCTION_CAPACITY_CONSTRAINT": 29,
+      "PO_CANCELLED": 29,
+      "TRANSPORT_DELAY": 14,
+      "NO_SCHEDULED_SUPPLY": 9,
+      "DEPENDENT_DEMAND": 6,
+      "INSUFFICIENT_OPENING_STOCK": 4
+    },
+    "shortages_by_status": {
+      "MITIGATION_PROPOSED": 263,
+      "UNMITIGATED": 55,
+      "PARTIALLY_MITIGATED": 4
+    },
+    "total_shortage_qty": 80450,
+    "total_shortage_value_usd": 1134310.79,
+    "share_with_feasible_mitigation": 0.9006,
+    "recommended_by_type": {
+      "NEW_PO_PRIMARY": 221,
+      "ACCEPT_BACKORDER": 55,
+      "EXPEDITE_PO": 29,
+      "STOCK_TRANSFER": 11,
+      "NEW_PO_ALTERNATE": 6
+    },
+    "recommended_value_protected_usd": 882602.91,
+    "recommended_incremental_cost_usd": 41300.04,
+    "mean_recommended_fill_rate_pct": 82.51,
+    "mitigation_options": 996,
+    "rejected_candidates_by_reason": {
+      "NO_SURPLUS": 116,
+      "COMPONENT_SHORTAGE": 29,
+      "LEAD_TIME_TOO_LONG": 28,
+      "SUBSTITUTE_NOT_APPROVED": 15,
+      "INSUFFICIENT_CAPACITY": 2,
+      "SUPPLIER_ON_HOLD": 1
+    },
+    "projected_service_level_pct": 89.3
+  },
+  "distribution": {
+    "weekly_demand_per_sku_location_quantiles": {
+      "0.05": 2.79,
+      "0.25": 8.94,
+      "0.5": 20.93,
+      "0.75": 50.87,
+      "0.95": 154.5
+    },
+    "demand_cv_quantiles": {
+      "0.05": 0.12,
+      "0.25": 0.15,
+      "0.5": 0.19,
+      "0.75": 0.27,
+      "0.95": 0.65
+    },
+    "zero_demand_week_share": 0.0123,
+    "sku_mix": {
+      "item_type": {
+        "FINISHED_GOOD": 255,
+        "COMPONENT": 45
+      },
+      "sourcing_type": {
+        "BUY": 270,
+        "MAKE": 30
+      },
+      "abc_class": {
+        "A": 107,
+        "C": 106,
+        "B": 87
+      },
+      "lifecycle_status": {
+        "ACTIVE": 270,
+        "NEW": 16,
+        "PHASE_OUT": 14
+      },
+      "base_uom": {
+        "EA": 269,
+        "KG": 18,
+        "L": 13
+      }
+    },
+    "unit_cost_quantiles": {
+      "0.05": 1.13,
+      "0.25": 3.85,
+      "0.5": 8.18,
+      "0.75": 15.91,
+      "0.95": 39.93
+    },
+    "lead_time_days_quantiles": {
+      "0.05": 9.0,
+      "0.25": 15.0,
+      "0.5": 19.0,
+      "0.75": 25.75,
+      "0.95": 40.75
+    },
+    "transport_mode_mix": {
+      "ROAD": 108,
+      "RAIL": 66,
+      "SEA": 32
+    },
+    "po_status_mix": {
+      "PLANNED": 788,
+      "RECEIVED": 156,
+      "IN_TRANSIT": 31,
+      "CONFIRMED": 24,
+      "CANCELLED": 10
+    },
+    "po_lines_per_order_quantiles": {
+      "0.05": 1.0,
+      "0.25": 2.0,
+      "0.5": 3.0,
+      "0.75": 6.0,
+      "0.95": 16.6
+    },
+    "po_delayed_share": 0.0109,
+    "sku_location_weeks_short_share": 0.107,
+    "sku_location_weeks_below_safety_stock_share": 0.1309
+  },
+  "coverage_matrix": [
+    {
+      "coverage_class": "NORMAL",
+      "scenario": "open PO lines received on promise (no delay)",
+      "count": 837
+    },
+    {
+      "coverage_class": "NORMAL",
+      "scenario": "SKU-location-weeks at or above safety stock",
+      "count": 18438
+    },
+    {
+      "coverage_class": "BOUNDARY",
+      "scenario": "supplier-weeks at exactly 100 % source utilisation",
+      "count": 12
+    },
+    {
+      "coverage_class": "BOUNDARY",
+      "scenario": "SKU-location-weeks with projected balance exactly 0",
+      "count": 46
+    },
+    {
+      "coverage_class": "BOUNDARY",
+      "scenario": "PO lines ordered at exactly MOQ",
+      "count": 970
+    },
+    {
+      "coverage_class": "BOUNDARY",
+      "scenario": "PO lines cut by supplier capacity (confirmed < requested)",
+      "count": 221
+    },
+    {
+      "coverage_class": "BOUNDARY",
+      "scenario": "lead-time lanes with a mid-horizon revision (version 2)",
+      "count": 17
+    },
+    {
+      "coverage_class": "BOUNDARY",
+      "scenario": "shortages starting inside replenishment lead time",
+      "count": 18
+    },
+    {
+      "coverage_class": "FAILURE",
+      "scenario": "cancelled purchase orders",
+      "count": 10
+    },
+    {
+      "coverage_class": "FAILURE",
+      "scenario": "transport/production delay events",
+      "count": 11
+    },
+    {
+      "coverage_class": "FAILURE",
+      "scenario": "rejected mitigation candidates",
+      "count": 191
+    },
+    {
+      "coverage_class": "FAILURE",
+      "scenario": "shortages left unmitigated (backorder recommended)",
+      "count": 55
+    },
+    {
+      "coverage_class": "EXCEPTION",
+      "scenario": "labelled edge cases injected",
+      "count": 15
+    },
+    {
+      "coverage_class": "EXCEPTION",
+      "scenario": "engine exceptions logged (detected_issue)",
+      "count": 47
+    }
+  ],
+  "leakage_audit": {
+    "engine_modules_reference_ground_truth": {
+      "planning.py": false,
+      "mitigation.py": false
+    },
+    "label_columns_in_inputs": {},
+    "passed": true
+  }
+}

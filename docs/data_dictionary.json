@@ -1,0 +1,4863 @@
+{
+  "calendar_week": {
+    "entity": "Calendar (supporting)",
+    "layer": "input",
+    "description": "ISO planning weeks of the plan year. Week index 0 starts on the planning as-of date.",
+    "grain": "one row per planning week",
+    "primary_key": "week_id",
+    "natural_key": null,
+    "lifecycle": null,
+    "foreign_keys": [],
+    "fields": [
+      {
+        "name": "week_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "ISO week identifier"
+      },
+      {
+        "name": "week_index",
+        "type": "integer",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "0-based week offset from the as-of date"
+      },
+      {
+        "name": "week_start_date",
+        "type": "date",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "ISO-8601 date YYYY-MM-DD",
+        "description": "Monday of the ISO week"
+      },
+      {
+        "name": "week_end_date",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "= week_start_date + 6 days",
+        "description": "Sunday of the ISO week"
+      },
+      {
+        "name": "is_holiday_week",
+        "type": "boolean",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Reduced supplier/plant capacity week"
+      }
+    ]
+  },
+  "location": {
+    "entity": "Location",
+    "layer": "input",
+    "description": "Plants (production + stocking) and distribution centres.",
+    "grain": "one row per location",
+    "primary_key": "location_id",
+    "natural_key": null,
+    "lifecycle": "ACTIVE (all synthetic locations are active in the horizon)",
+    "foreign_keys": [],
+    "fields": [
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Location identifier"
+      },
+      {
+        "name": "location_name",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Synthetic display name"
+      },
+      {
+        "name": "location_type",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "PLANT",
+          "DC"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Plant or distribution centre"
+      },
+      {
+        "name": "region",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "NORTH",
+          "SOUTH",
+          "EAST",
+          "WEST",
+          "CENTRAL"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Planning region"
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "ACTIVE"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Lifecycle status"
+      },
+      {
+        "name": "effective_from",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "ISO-8601 date YYYY-MM-DD",
+        "description": "Date the location became active"
+      }
+    ]
+  },
+  "supplier": {
+    "entity": "Supplier",
+    "layer": "input",
+    "description": "External suppliers. Capacity is in supplier_capacity; lanes and lead times in lead_time.",
+    "grain": "one row per supplier",
+    "primary_key": "supplier_id",
+    "natural_key": null,
+    "lifecycle": "ACTIVE -> ON_HOLD (policy: no new POs while ON_HOLD)",
+    "foreign_keys": [],
+    "fields": [
+      {
+        "name": "supplier_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SUP-\\d{4}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Supplier identifier"
+      },
+      {
+        "name": "supplier_name",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Synthetic display name"
+      },
+      {
+        "name": "region",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "NORTH",
+          "SOUTH",
+          "EAST",
+          "WEST",
+          "CENTRAL"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Home region"
+      },
+      {
+        "name": "is_overseas",
+        "type": "boolean",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Ships by sea from outside the network"
+      },
+      {
+        "name": "supplier_tier",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "STRATEGIC",
+          "PREFERRED",
+          "APPROVED"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Commercial tier"
+      },
+      {
+        "name": "supplier_role",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "FINISHED_GOODS",
+          "COMPONENTS"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "What the supplier provides"
+      },
+      {
+        "name": "reliability_pct",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "percent",
+        "pattern": null,
+        "min": 0,
+        "max": 100,
+        "rule": null,
+        "description": "Historical on-time delivery"
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "ACTIVE",
+          "ON_HOLD"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "ON_HOLD suppliers may not receive new purchase orders"
+      },
+      {
+        "name": "effective_from",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "ISO-8601 date YYYY-MM-DD",
+        "description": "Onboarding date"
+      }
+    ]
+  },
+  "sku": {
+    "entity": "SKU",
+    "layer": "input",
+    "description": "Stock-keeping units: purchased finished goods, manufactured finished goods and purchased components.",
+    "grain": "one row per SKU",
+    "primary_key": "sku_id",
+    "natural_key": null,
+    "lifecycle": "NEW -> ACTIVE -> PHASE_OUT; no demand outside [effective_from, effective_to]",
+    "foreign_keys": [],
+    "fields": [
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU identifier"
+      },
+      {
+        "name": "sku_name",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Synthetic display name"
+      },
+      {
+        "name": "category",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "ELECTRONICS",
+          "HOME_GOODS",
+          "PERSONAL_CARE",
+          "FOOD_BEVERAGE",
+          "APPAREL",
+          "HARDWARE",
+          "RAW_MATERIAL",
+          "PACKAGING",
+          "PARTS"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Product category"
+      },
+      {
+        "name": "item_type",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "FINISHED_GOOD",
+          "COMPONENT"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Finished good or BOM component"
+      },
+      {
+        "name": "sourcing_type",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "BUY",
+          "MAKE"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "COMPONENT => BUY",
+        "description": "BUY from suppliers or MAKE in a plant"
+      },
+      {
+        "name": "base_uom",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "EA",
+          "KG",
+          "L"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Base (stocking) unit of measure"
+      },
+      {
+        "name": "units_per_case",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Base units in one case (CS)"
+      },
+      {
+        "name": "unit_cost",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "USD",
+        "pattern": null,
+        "min": 0.01,
+        "max": null,
+        "rule": null,
+        "description": "Standard cost per base unit"
+      },
+      {
+        "name": "unit_price",
+        "type": "decimal",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "USD",
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "required for FINISHED_GOOD; > unit_cost",
+        "description": "Selling price per base unit (finished goods only)"
+      },
+      {
+        "name": "abc_class",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "A",
+          "B",
+          "C"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Derived Pareto class on annual demand value (A=80%, B=15%, C=5%)"
+      },
+      {
+        "name": "lifecycle_status",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "NEW",
+          "ACTIVE",
+          "PHASE_OUT"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Product lifecycle"
+      },
+      {
+        "name": "effective_from",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "ISO-8601 date YYYY-MM-DD",
+        "description": "First date the SKU can be sold/planned"
+      },
+      {
+        "name": "effective_to",
+        "type": "date",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "required iff lifecycle_status = PHASE_OUT; >= effective_from",
+        "description": "Last date (PHASE_OUT only)"
+      }
+    ]
+  },
+  "sku_location": {
+    "entity": "SKU-Location (bridge)",
+    "layer": "input",
+    "description": "Bridge resolving the N:M SKU<->Location relationship; holds stocking policy.",
+    "grain": "one row per stocked SKU at a location",
+    "primary_key": "sku_location_id",
+    "natural_key": [
+      "sku_id",
+      "location_id"
+    ],
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "sku_id"
+        ],
+        "ref_table": "sku",
+        "ref_columns": [
+          "sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "location_id"
+        ],
+        "ref_table": "location",
+        "ref_columns": [
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "primary_supplier_id"
+        ],
+        "ref_table": "supplier",
+        "ref_columns": [
+          "supplier_id"
+        ],
+        "cardinality": "N:1",
+        "optional": true
+      }
+    ],
+    "fields": [
+      {
+        "name": "sku_location_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SL-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Bridge identifier"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Stocked SKU"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Stocking location"
+      },
+      {
+        "name": "planning_method",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "PURCHASE",
+          "PRODUCTION",
+          "DEPENDENT_PURCHASE"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "How supply is planned"
+      },
+      {
+        "name": "primary_supplier_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SUP-\\d{4}$",
+        "min": null,
+        "max": null,
+        "rule": "required iff planning_method in (PURCHASE, DEPENDENT_PURCHASE)",
+        "description": "Primary supplier for purchased items"
+      },
+      {
+        "name": "safety_stock_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Derived: ceil(z(ABC) * 0.3 * mean weekly demand * sqrt(lead-time weeks))"
+      },
+      {
+        "name": "effective_from",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "ISO-8601 date YYYY-MM-DD",
+        "description": "Start of stocking"
+      }
+    ]
+  },
+  "supplier_sku": {
+    "entity": "Supplier-SKU (bridge)",
+    "layer": "input",
+    "description": "Bridge resolving N:M Supplier<->SKU; purchasing terms (UoM, MOQ, multiple, price).",
+    "grain": "one row per supplier offering a SKU",
+    "primary_key": "supplier_sku_id",
+    "natural_key": [
+      "supplier_id",
+      "sku_id"
+    ],
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "supplier_id"
+        ],
+        "ref_table": "supplier",
+        "ref_columns": [
+          "supplier_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "sku_id"
+        ],
+        "ref_table": "sku",
+        "ref_columns": [
+          "sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "supplier_sku_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SS-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Bridge identifier"
+      },
+      {
+        "name": "supplier_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SUP-\\d{4}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Supplier"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU"
+      },
+      {
+        "name": "supplier_priority",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "1 = primary, 2+ = alternate"
+      },
+      {
+        "name": "purchase_uom",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "EA",
+          "CS",
+          "KG",
+          "L"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Unit the supplier sells in"
+      },
+      {
+        "name": "uom_conversion_factor",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom/purchase_uom",
+        "pattern": null,
+        "min": 0.0001,
+        "max": null,
+        "rule": "CS => sku.units_per_case; same-as-base => 1",
+        "description": "Base units per purchase unit"
+      },
+      {
+        "name": "min_order_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "purchase_uom",
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Minimum order quantity (MOQ)"
+      },
+      {
+        "name": "order_multiple",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "purchase_uom",
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Order quantity must be a multiple of this"
+      },
+      {
+        "name": "unit_cost",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "USD",
+        "pattern": null,
+        "min": 0.01,
+        "max": null,
+        "rule": null,
+        "description": "Price per base unit"
+      },
+      {
+        "name": "approval_status",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "APPROVED"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Sourcing approval"
+      },
+      {
+        "name": "effective_from",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "ISO-8601 date YYYY-MM-DD",
+        "description": "Start of agreement"
+      },
+      {
+        "name": "effective_to",
+        "type": "date",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": ">= effective_from",
+        "description": "End of agreement"
+      }
+    ]
+  },
+  "lead_time": {
+    "entity": "LeadTime",
+    "layer": "input",
+    "description": "Effective-dated lead time per supplier->location lane. Revisions add a new version; history is kept.",
+    "grain": "one row per lane per version",
+    "primary_key": "lead_time_id",
+    "natural_key": [
+      "supplier_id",
+      "location_id",
+      "version"
+    ],
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "supplier_id"
+        ],
+        "ref_table": "supplier",
+        "ref_columns": [
+          "supplier_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "location_id"
+        ],
+        "ref_table": "location",
+        "ref_columns": [
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "lead_time_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LT-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Lead-time version identifier"
+      },
+      {
+        "name": "supplier_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SUP-\\d{4}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Shipping supplier"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Receiving location"
+      },
+      {
+        "name": "version",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Version number within the lane (1 = original)"
+      },
+      {
+        "name": "transport_mode",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "ROAD",
+          "RAIL",
+          "SEA",
+          "AIR"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Standard mode"
+      },
+      {
+        "name": "production_lead_days",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "days",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Order -> ship"
+      },
+      {
+        "name": "transit_days",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "days",
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Ship -> receipt"
+      },
+      {
+        "name": "total_lead_days",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "days",
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Derived: production_lead_days + transit_days"
+      },
+      {
+        "name": "expedite_transit_days",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "days",
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": "<= transit_days",
+        "description": "Transit if expedited (air/priority)"
+      },
+      {
+        "name": "expedite_premium_pct",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "percent",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Expedite surcharge as % of line value"
+      },
+      {
+        "name": "effective_from",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "ISO-8601 date YYYY-MM-DD",
+        "description": "Version start"
+      },
+      {
+        "name": "effective_to",
+        "type": "date",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "versions of a lane do not overlap; v(n).effective_to = v(n+1).effective_from - 1 day",
+        "description": "Version end (null = open)"
+      }
+    ]
+  },
+  "supplier_capacity": {
+    "entity": "SupplierCapacity",
+    "layer": "input",
+    "description": "Weekly shipping capacity per supplier across all SKUs, in base units, measured on PO ship week.",
+    "grain": "one row per supplier per planning week",
+    "primary_key": "supplier_capacity_id",
+    "natural_key": [
+      "supplier_id",
+      "week_id"
+    ],
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "supplier_id"
+        ],
+        "ref_table": "supplier",
+        "ref_columns": [
+          "supplier_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "week_id"
+        ],
+        "ref_table": "calendar_week",
+        "ref_columns": [
+          "week_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "supplier_capacity_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SCAP-SUP-\\d{4}-\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Capacity identifier"
+      },
+      {
+        "name": "supplier_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SUP-\\d{4}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Supplier"
+      },
+      {
+        "name": "week_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Planning week"
+      },
+      {
+        "name": "capacity_units",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base units",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Maximum base units the supplier can ship in the week"
+      }
+    ]
+  },
+  "forecast_demand": {
+    "entity": "ForecastDemand",
+    "layer": "input",
+    "description": "Independent weekly forecast demand per SKU-location (finished goods only).",
+    "grain": "one row per SKU, location and week within the SKU's effective window",
+    "primary_key": "demand_id",
+    "natural_key": [
+      "sku_id",
+      "location_id",
+      "week_id"
+    ],
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "sku_id"
+        ],
+        "ref_table": "sku",
+        "ref_columns": [
+          "sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "location_id"
+        ],
+        "ref_table": "location",
+        "ref_columns": [
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "week_id"
+        ],
+        "ref_table": "calendar_week",
+        "ref_columns": [
+          "week_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "sku_id",
+          "location_id"
+        ],
+        "ref_table": "sku_location",
+        "ref_columns": [
+          "sku_id",
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "demand_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^DEM-SKU-\\d{6}-LOC-\\d{3}-\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "DEM-<sku>-<location>-<week>"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Location"
+      },
+      {
+        "name": "week_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Planning week"
+      },
+      {
+        "name": "forecast_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Forecast quantity"
+      },
+      {
+        "name": "uom",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "EA",
+          "KG",
+          "L"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Must equal sku.base_uom"
+      },
+      {
+        "name": "forecast_version",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "FV-2026-01"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Forecast release"
+      }
+    ]
+  },
+  "inventory": {
+    "entity": "Inventory",
+    "layer": "input",
+    "description": "Inventory snapshot at the as-of date: on-hand, quality hold and in-transit (linked to the PO line).",
+    "grain": "one row per SKU-location-stock status (in-transit: per PO line)",
+    "primary_key": "inventory_id",
+    "natural_key": null,
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "sku_id"
+        ],
+        "ref_table": "sku",
+        "ref_columns": [
+          "sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "location_id"
+        ],
+        "ref_table": "location",
+        "ref_columns": [
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "po_line_id"
+        ],
+        "ref_table": "purchase_order_line",
+        "ref_columns": [
+          "po_line_id"
+        ],
+        "cardinality": "N:1",
+        "optional": true
+      },
+      {
+        "columns": [
+          "sku_id",
+          "location_id"
+        ],
+        "ref_table": "sku_location",
+        "ref_columns": [
+          "sku_id",
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "inventory_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^INV-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Inventory record identifier"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Location"
+      },
+      {
+        "name": "snapshot_date",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "= planning as-of date",
+        "description": "As-of date of the snapshot"
+      },
+      {
+        "name": "stock_status",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "ON_HAND",
+          "IN_TRANSIT",
+          "QUALITY_HOLD"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Availability status"
+      },
+      {
+        "name": "quantity",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Quantity"
+      },
+      {
+        "name": "uom",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "EA",
+          "KG",
+          "L"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Must equal sku.base_uom"
+      },
+      {
+        "name": "po_line_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PO-\\d{4}-\\d{6}-L\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": "required iff stock_status = IN_TRANSIT; at most one IN_TRANSIT row per PO line",
+        "description": "Inbound PO line (IN_TRANSIT only)"
+      }
+    ]
+  },
+  "purchase_order": {
+    "entity": "PurchaseOrder",
+    "layer": "input",
+    "description": "Inbound purchase order header (one supplier -> one receiving location). Status is derived from events.",
+    "grain": "one row per purchase order",
+    "primary_key": "po_id",
+    "natural_key": null,
+    "lifecycle": "PLANNED -> CONFIRMED -> IN_TRANSIT -> RECEIVED; PLANNED|CONFIRMED -> CANCELLED",
+    "foreign_keys": [
+      {
+        "columns": [
+          "supplier_id"
+        ],
+        "ref_table": "supplier",
+        "ref_columns": [
+          "supplier_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "location_id"
+        ],
+        "ref_table": "location",
+        "ref_columns": [
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "lead_time_id"
+        ],
+        "ref_table": "lead_time",
+        "ref_columns": [
+          "lead_time_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "po_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PO-\\d{4}-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "PO-<year>-<counter>"
+      },
+      {
+        "name": "supplier_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SUP-\\d{4}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Supplier"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Receiving location"
+      },
+      {
+        "name": "lead_time_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LT-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Lead-time version effective at order_date"
+      },
+      {
+        "name": "order_date",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "ISO-8601 date YYYY-MM-DD",
+        "description": "Date the order is (or will be) released to the supplier"
+      },
+      {
+        "name": "ship_date",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": ">= order_date",
+        "description": "Planned ship date = order_date + production_lead_days"
+      },
+      {
+        "name": "promised_receipt_date",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": ">= ship_date",
+        "description": "order_date + total_lead_days of lead_time_id"
+      },
+      {
+        "name": "transport_delay_days",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "days",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Derived: sum of DELAY_REPORTED event delays"
+      },
+      {
+        "name": "expected_receipt_date",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Derived: promised_receipt_date + transport_delay_days"
+      },
+      {
+        "name": "actual_receipt_date",
+        "type": "date",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "required iff status = RECEIVED; < as-of date",
+        "description": "Receipt date (RECEIVED only)"
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "PLANNED",
+          "CONFIRMED",
+          "IN_TRANSIT",
+          "RECEIVED",
+          "CANCELLED"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Derived: to_status of the latest event"
+      },
+      {
+        "name": "line_count",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Derived: number of lines"
+      },
+      {
+        "name": "total_base_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base units",
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Derived: sum(line.base_qty)"
+      },
+      {
+        "name": "total_value",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "USD",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Derived: sum(line.line_value)"
+      },
+      {
+        "name": "currency",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "USD"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Currency"
+      },
+      {
+        "name": "created_at",
+        "type": "datetime",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Timestamp of the CREATED event"
+      }
+    ]
+  },
+  "purchase_order_line": {
+    "entity": "PurchaseOrder line",
+    "layer": "input",
+    "description": "PO line: one SKU, ordered in the supplier's purchase UoM.",
+    "grain": "one row per PO line",
+    "primary_key": "po_line_id",
+    "natural_key": [
+      "po_id",
+      "sku_id"
+    ],
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "po_id"
+        ],
+        "ref_table": "purchase_order",
+        "ref_columns": [
+          "po_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "sku_id"
+        ],
+        "ref_table": "sku",
+        "ref_columns": [
+          "sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "supplier_sku_id"
+        ],
+        "ref_table": "supplier_sku",
+        "ref_columns": [
+          "supplier_sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "po_line_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PO-\\d{4}-\\d{6}-L\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "<po_id>-L<nn>"
+      },
+      {
+        "name": "po_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PO-\\d{4}-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Parent PO"
+      },
+      {
+        "name": "line_number",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Line number within PO"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU"
+      },
+      {
+        "name": "supplier_sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SS-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": "supplier_sku.supplier_id = purchase_order.supplier_id and supplier_sku.sku_id = sku_id",
+        "description": "Purchasing terms used"
+      },
+      {
+        "name": "requested_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "order_uom",
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Quantity the planner requested"
+      },
+      {
+        "name": "order_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "order_uom",
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": "<= requested_qty; >= MOQ and multiple of order_multiple",
+        "description": "Quantity confirmed by the supplier (capacity-limited suppliers may cut it)"
+      },
+      {
+        "name": "order_uom",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "EA",
+          "CS",
+          "KG",
+          "L"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Unit ordered in"
+      },
+      {
+        "name": "uom_conversion_factor",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0.0001,
+        "max": null,
+        "rule": null,
+        "description": "Base units per order unit"
+      },
+      {
+        "name": "base_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Derived: order_qty * uom_conversion_factor"
+      },
+      {
+        "name": "base_uom",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "EA",
+          "KG",
+          "L"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU base unit"
+      },
+      {
+        "name": "unit_cost",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "USD",
+        "pattern": null,
+        "min": 0.01,
+        "max": null,
+        "rule": null,
+        "description": "Price per base unit"
+      },
+      {
+        "name": "line_value",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "USD",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Derived: base_qty * unit_cost"
+      }
+    ]
+  },
+  "purchase_order_event": {
+    "entity": "PurchaseOrder event (history)",
+    "layer": "input",
+    "description": "Append-only state-change history of purchase orders. History is never overwritten.",
+    "grain": "one row per state change",
+    "primary_key": "event_id",
+    "natural_key": [
+      "po_id",
+      "event_seq"
+    ],
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "po_id"
+        ],
+        "ref_table": "purchase_order",
+        "ref_columns": [
+          "po_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "event_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^POE-\\d{7}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Event identifier"
+      },
+      {
+        "name": "po_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PO-\\d{4}-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Purchase order"
+      },
+      {
+        "name": "event_seq",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "1-based sequence within the PO"
+      },
+      {
+        "name": "event_type",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "CREATED",
+          "CONFIRMED",
+          "SHIPPED",
+          "DELAY_REPORTED",
+          "RECEIVED",
+          "CANCELLED"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Event"
+      },
+      {
+        "name": "from_status",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": [
+          "PLANNED",
+          "CONFIRMED",
+          "IN_TRANSIT",
+          "RECEIVED",
+          "CANCELLED"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Status before (null for CREATED)"
+      },
+      {
+        "name": "to_status",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "PLANNED",
+          "CONFIRMED",
+          "IN_TRANSIT",
+          "RECEIVED",
+          "CANCELLED"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Status after"
+      },
+      {
+        "name": "event_timestamp",
+        "type": "datetime",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "strictly increasing per PO; < as-of date",
+        "description": "When it happened"
+      },
+      {
+        "name": "actor",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "PLANNER",
+          "SUPPLIER",
+          "CARRIER",
+          "WAREHOUSE_OPERATOR",
+          "OPERATIONS_MANAGER"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Who recorded it"
+      },
+      {
+        "name": "delay_days",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "days",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Delay reported (DELAY_REPORTED only)"
+      },
+      {
+        "name": "note",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Free text"
+      }
+    ]
+  },
+  "bom": {
+    "entity": "BOM (bridge)",
+    "layer": "input",
+    "description": "Bill of materials: N:M bridge between manufactured SKUs and component SKUs.",
+    "grain": "one row per parent-component pair",
+    "primary_key": "bom_id",
+    "natural_key": [
+      "parent_sku_id",
+      "component_sku_id"
+    ],
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "parent_sku_id"
+        ],
+        "ref_table": "sku",
+        "ref_columns": [
+          "sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "component_sku_id"
+        ],
+        "ref_table": "sku",
+        "ref_columns": [
+          "sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "bom_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^BOM-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "BOM line identifier"
+      },
+      {
+        "name": "parent_sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Manufactured SKU (MAKE)"
+      },
+      {
+        "name": "component_sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Component SKU"
+      },
+      {
+        "name": "qty_per",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0.0001,
+        "max": null,
+        "rule": null,
+        "description": "Component base units per parent unit"
+      },
+      {
+        "name": "component_uom",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "EA",
+          "KG",
+          "L"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Must equal component sku.base_uom"
+      },
+      {
+        "name": "effective_from",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "ISO-8601 date YYYY-MM-DD",
+        "description": "Start"
+      },
+      {
+        "name": "effective_to",
+        "type": "date",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "End"
+      }
+    ]
+  },
+  "production_capacity": {
+    "entity": "Production capacity",
+    "layer": "input",
+    "description": "Weekly production capacity per plant (all manufactured SKUs), in base units.",
+    "grain": "one row per plant per week",
+    "primary_key": "production_capacity_id",
+    "natural_key": [
+      "location_id",
+      "week_id"
+    ],
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "location_id"
+        ],
+        "ref_table": "location",
+        "ref_columns": [
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "week_id"
+        ],
+        "ref_table": "calendar_week",
+        "ref_columns": [
+          "week_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "production_capacity_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PCAP-LOC-\\d{3}-\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Capacity identifier"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": "location.location_type = PLANT",
+        "description": "Plant"
+      },
+      {
+        "name": "week_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Week"
+      },
+      {
+        "name": "capacity_units",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base units",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Max units producible"
+      }
+    ]
+  },
+  "production_plan": {
+    "entity": "ProductionPlan",
+    "layer": "input",
+    "description": "Planned production of manufactured SKUs per plant and week.",
+    "grain": "one row per SKU, plant and week with production",
+    "primary_key": "production_plan_id",
+    "natural_key": [
+      "sku_id",
+      "location_id",
+      "week_id"
+    ],
+    "lifecycle": "PLANNED -> FIRM (inside frozen fence)",
+    "foreign_keys": [
+      {
+        "columns": [
+          "sku_id"
+        ],
+        "ref_table": "sku",
+        "ref_columns": [
+          "sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "location_id"
+        ],
+        "ref_table": "location",
+        "ref_columns": [
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "week_id"
+        ],
+        "ref_table": "calendar_week",
+        "ref_columns": [
+          "week_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "sku_id",
+          "location_id"
+        ],
+        "ref_table": "sku_location",
+        "ref_columns": [
+          "sku_id",
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "production_plan_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PP-\\d{4}-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "PP-<year>-<counter>"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": "sku.sourcing_type = MAKE",
+        "description": "Manufactured SKU"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Plant"
+      },
+      {
+        "name": "week_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Production week"
+      },
+      {
+        "name": "required_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Unconstrained requirement (before plant capacity)"
+      },
+      {
+        "name": "planned_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": "<= required_qty; multiple of batch_size; plant total <= production_capacity",
+        "description": "Capacity-constrained planned quantity"
+      },
+      {
+        "name": "batch_size",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Batch multiple"
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "FIRM",
+          "PLANNED"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "FIRM inside the 2-week frozen fence, else PLANNED"
+      }
+    ]
+  },
+  "sku_substitute": {
+    "entity": "SKU substitute (bridge)",
+    "layer": "input",
+    "description": "N:M self-bridge on SKU: which SKU may replace another. Only APPROVED and effective links are usable.",
+    "grain": "one row per SKU-substitute pair",
+    "primary_key": "substitution_id",
+    "natural_key": [
+      "sku_id",
+      "substitute_sku_id"
+    ],
+    "lifecycle": "PENDING -> APPROVED | REJECTED",
+    "foreign_keys": [
+      {
+        "columns": [
+          "sku_id"
+        ],
+        "ref_table": "sku",
+        "ref_columns": [
+          "sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "substitute_sku_id"
+        ],
+        "ref_table": "sku",
+        "ref_columns": [
+          "sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "substitution_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SUB-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Substitution identifier"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU being substituted"
+      },
+      {
+        "name": "substitute_sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": "!= sku_id; same base_uom",
+        "description": "Replacement SKU"
+      },
+      {
+        "name": "conversion_ratio",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0.0001,
+        "max": null,
+        "rule": null,
+        "description": "Substitute units per original unit"
+      },
+      {
+        "name": "approval_status",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "APPROVED",
+          "PENDING",
+          "REJECTED"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Approval state"
+      },
+      {
+        "name": "approved_by",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": [
+          "PLANNER",
+          "OPERATIONS_MANAGER"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "required iff APPROVED",
+        "description": "Approver role"
+      },
+      {
+        "name": "approval_date",
+        "type": "date",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "required iff APPROVED",
+        "description": "Approval date"
+      },
+      {
+        "name": "effective_from",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": "ISO-8601 date YYYY-MM-DD",
+        "description": "Start"
+      },
+      {
+        "name": "effective_to",
+        "type": "date",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "End"
+      },
+      {
+        "name": "priority",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Preference order"
+      }
+    ]
+  },
+  "scheduled_receipt": {
+    "entity": "Scheduled receipt (derived)",
+    "layer": "output",
+    "description": "Every open PO line as used by the plan, with any correction applied (source rows are never modified).",
+    "grain": "one row per open PO line",
+    "primary_key": "po_line_id",
+    "natural_key": null,
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "po_line_id"
+        ],
+        "ref_table": "purchase_order_line",
+        "ref_columns": [
+          "po_line_id"
+        ],
+        "cardinality": "1:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "po_id"
+        ],
+        "ref_table": "purchase_order",
+        "ref_columns": [
+          "po_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "po_line_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PO-\\d{4}-\\d{6}-L\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "PO line"
+      },
+      {
+        "name": "po_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PO-\\d{4}-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "PO"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Receiving location"
+      },
+      {
+        "name": "supplier_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SUP-\\d{4}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Supplier"
+      },
+      {
+        "name": "po_status",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "PLANNED",
+          "CONFIRMED",
+          "IN_TRANSIT",
+          "RECEIVED",
+          "CANCELLED"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "PO status"
+      },
+      {
+        "name": "source_base_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "base_qty as recorded on the line"
+      },
+      {
+        "name": "planning_base_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Quantity used in the plan after UoM correction"
+      },
+      {
+        "name": "source_receipt_date",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "expected_receipt_date as recorded"
+      },
+      {
+        "name": "planning_receipt_date",
+        "type": "date",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Receipt date used after lead-time / capacity corrections"
+      },
+      {
+        "name": "ship_week_index",
+        "type": "integer",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Week index the supplier ships (capacity bucket)"
+      },
+      {
+        "name": "receipt_week_index",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Week index of planning receipt"
+      },
+      {
+        "name": "adjustment_codes",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Pipe-separated corrections applied"
+      },
+      {
+        "name": "counted_in_plan",
+        "type": "boolean",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "False if cancelled, outside horizon or unconvertible"
+      }
+    ]
+  },
+  "projected_balance": {
+    "entity": "Projected available balance (derived)",
+    "layer": "output",
+    "description": "Week-by-week projected available balance (PAB). closing = opening + receipts + production - demand - dependent demand.",
+    "grain": "one row per SKU-location-week",
+    "primary_key": "pab_id",
+    "natural_key": [
+      "sku_id",
+      "location_id",
+      "week_id"
+    ],
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "sku_id",
+          "location_id"
+        ],
+        "ref_table": "sku_location",
+        "ref_columns": [
+          "sku_id",
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "week_id"
+        ],
+        "ref_table": "calendar_week",
+        "ref_columns": [
+          "week_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "pab_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PAB-SKU-\\d{6}-LOC-\\d{3}-\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "PAB-<sku>-<location>-<week>"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Location"
+      },
+      {
+        "name": "week_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Week"
+      },
+      {
+        "name": "week_index",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Week offset"
+      },
+      {
+        "name": "opening_balance",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Previous closing (week 0: available on-hand)"
+      },
+      {
+        "name": "forecast_demand",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Independent demand"
+      },
+      {
+        "name": "dependent_demand",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "BOM-exploded demand from production"
+      },
+      {
+        "name": "scheduled_receipts",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Sum of counted scheduled_receipt rows"
+      },
+      {
+        "name": "planned_production",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Sum of production_plan"
+      },
+      {
+        "name": "closing_balance",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Projected available balance; negative = backlog"
+      },
+      {
+        "name": "safety_stock_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Safety stock"
+      },
+      {
+        "name": "below_safety_stock",
+        "type": "boolean",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "closing_balance < safety_stock_qty"
+      },
+      {
+        "name": "is_shortage",
+        "type": "boolean",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "closing_balance < 0"
+      }
+    ]
+  },
+  "shortage": {
+    "entity": "Shortage (derived)",
+    "layer": "output",
+    "description": "Shortage episode: consecutive weeks with negative projected balance for a SKU-location.",
+    "grain": "one row per shortage episode",
+    "primary_key": "shortage_id",
+    "natural_key": null,
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "sku_id",
+          "location_id"
+        ],
+        "ref_table": "sku_location",
+        "ref_columns": [
+          "sku_id",
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "shortage_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SHORT-\\d{4}-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SHORT-<year>-<counter>, numbered in priority order"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Location"
+      },
+      {
+        "name": "start_week_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "First negative week"
+      },
+      {
+        "name": "end_week_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Last negative week"
+      },
+      {
+        "name": "start_week_index",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": ""
+      },
+      {
+        "name": "end_week_index",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": ""
+      },
+      {
+        "name": "duration_weeks",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "end - start + 1"
+      },
+      {
+        "name": "shortage_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Peak deficit = -min(closing_balance) in the episode"
+      },
+      {
+        "name": "shortage_value",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "USD",
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "shortage_qty * unit_price (components: 2 * unit_cost)"
+      },
+      {
+        "name": "lead_time_weeks",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "First week index a normal action can land: week of (as-of + primary lane total_lead_days) for purchased items; frozen fence (2) for manufactured items"
+      },
+      {
+        "name": "within_lead_time",
+        "type": "boolean",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "start_week_index < lead_time_weeks: cannot be fixed by a normal order"
+      },
+      {
+        "name": "priority_score",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": 100,
+        "rule": null,
+        "description": "0-100 weighted score (value, urgency, ABC, duration)"
+      },
+      {
+        "name": "priority_rank",
+        "type": "integer",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "1 = most urgent"
+      },
+      {
+        "name": "priority_tier",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "CRITICAL",
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Tier"
+      },
+      {
+        "name": "primary_cause_code",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "DEMAND_EXCEEDS_SUPPLY",
+          "DEMAND_SPIKE",
+          "INSUFFICIENT_OPENING_STOCK",
+          "TRANSPORT_DELAY",
+          "SUPPLIER_CAPACITY_CONSTRAINT",
+          "PRODUCTION_CAPACITY_CONSTRAINT",
+          "DEPENDENT_DEMAND",
+          "PO_CANCELLED",
+          "LEAD_TIME_CORRECTION",
+          "UOM_CORRECTION",
+          "NO_SCHEDULED_SUPPLY"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Largest-contribution cause"
+      },
+      {
+        "name": "cause_summary",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Human-readable explanation with reconciliation arithmetic"
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "MITIGATION_PROPOSED",
+          "PARTIALLY_MITIGATED",
+          "UNMITIGATED"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Derived from mitigation coverage"
+      }
+    ]
+  },
+  "shortage_cause": {
+    "entity": "Shortage cause (derived)",
+    "layer": "output",
+    "description": "Explainable causes of each shortage with quantified contribution and evidence record IDs.",
+    "grain": "one row per cause per shortage",
+    "primary_key": "shortage_cause_id",
+    "natural_key": [
+      "shortage_id",
+      "cause_seq"
+    ],
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "shortage_id"
+        ],
+        "ref_table": "shortage",
+        "ref_columns": [
+          "shortage_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "shortage_cause_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SC-SHORT-\\d{4}-\\d{6}-\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SC-<shortage_id>-<nn>"
+      },
+      {
+        "name": "shortage_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SHORT-\\d{4}-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Shortage"
+      },
+      {
+        "name": "cause_seq",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "Order (1 = primary)"
+      },
+      {
+        "name": "cause_code",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "DEMAND_EXCEEDS_SUPPLY",
+          "DEMAND_SPIKE",
+          "INSUFFICIENT_OPENING_STOCK",
+          "TRANSPORT_DELAY",
+          "SUPPLIER_CAPACITY_CONSTRAINT",
+          "PRODUCTION_CAPACITY_CONSTRAINT",
+          "DEPENDENT_DEMAND",
+          "PO_CANCELLED",
+          "LEAD_TIME_CORRECTION",
+          "UOM_CORRECTION",
+          "NO_SCHEDULED_SUPPLY"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Cause"
+      },
+      {
+        "name": "contribution_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Quantified effect on the deficit"
+      },
+      {
+        "name": "evidence_record_type",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Table holding the evidence"
+      },
+      {
+        "name": "evidence_record_ids",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Pipe-separated record IDs"
+      },
+      {
+        "name": "explanation",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Plain-language explanation"
+      }
+    ]
+  },
+  "mitigation_option": {
+    "entity": "MitigationOption (derived)",
+    "layer": "output",
+    "description": "Feasible mitigation alternatives per shortage with cost / service trade-offs. All pass policy and capacity checks.",
+    "grain": "one row per feasible option",
+    "primary_key": "mitigation_id",
+    "natural_key": null,
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "shortage_id"
+        ],
+        "ref_table": "shortage",
+        "ref_columns": [
+          "shortage_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      },
+      {
+        "columns": [
+          "supplier_id"
+        ],
+        "ref_table": "supplier",
+        "ref_columns": [
+          "supplier_id"
+        ],
+        "cardinality": "N:1",
+        "optional": true
+      },
+      {
+        "columns": [
+          "po_id"
+        ],
+        "ref_table": "purchase_order",
+        "ref_columns": [
+          "po_id"
+        ],
+        "cardinality": "N:1",
+        "optional": true
+      },
+      {
+        "columns": [
+          "source_location_id"
+        ],
+        "ref_table": "location",
+        "ref_columns": [
+          "location_id"
+        ],
+        "cardinality": "N:1",
+        "optional": true
+      },
+      {
+        "columns": [
+          "substitute_sku_id"
+        ],
+        "ref_table": "sku",
+        "ref_columns": [
+          "sku_id"
+        ],
+        "cardinality": "N:1",
+        "optional": true
+      },
+      {
+        "columns": [
+          "substitution_id"
+        ],
+        "ref_table": "sku_substitute",
+        "ref_columns": [
+          "substitution_id"
+        ],
+        "cardinality": "N:1",
+        "optional": true
+      }
+    ],
+    "fields": [
+      {
+        "name": "mitigation_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^MIT-SHORT-\\d{4}-\\d{6}-\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "MIT-<shortage_id>-<nn> (nn = option rank)"
+      },
+      {
+        "name": "shortage_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SHORT-\\d{4}-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Shortage"
+      },
+      {
+        "name": "option_rank",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 1,
+        "max": null,
+        "rule": null,
+        "description": "1 = best net benefit"
+      },
+      {
+        "name": "mitigation_type",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "EXPEDITE_PO",
+          "NEW_PO_PRIMARY",
+          "NEW_PO_ALTERNATE",
+          "STOCK_TRANSFER",
+          "APPROVED_SUBSTITUTE",
+          "INCREASE_PRODUCTION",
+          "ACCEPT_BACKORDER"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Action"
+      },
+      {
+        "name": "supplier_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SUP-\\d{4}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Supplier used"
+      },
+      {
+        "name": "po_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PO-\\d{4}-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "PO expedited"
+      },
+      {
+        "name": "source_location_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Transfer source"
+      },
+      {
+        "name": "substitute_sku_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SKU-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Substitute used"
+      },
+      {
+        "name": "substitution_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SUB-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Approved substitution link"
+      },
+      {
+        "name": "proposed_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Quantity moved/ordered"
+      },
+      {
+        "name": "order_qty_purchase_uom",
+        "type": "integer",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Order quantity in purchase UoM (POs)"
+      },
+      {
+        "name": "arrival_week_index",
+        "type": "integer",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Week the quantity becomes available"
+      },
+      {
+        "name": "covered_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "min(proposed_qty, shortage_qty)"
+      },
+      {
+        "name": "residual_shortage_qty",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "base_uom",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "shortage_qty - covered_qty"
+      },
+      {
+        "name": "fill_rate_pct",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "percent",
+        "pattern": null,
+        "min": 0,
+        "max": 100,
+        "rule": null,
+        "description": "covered / shortage"
+      },
+      {
+        "name": "weeks_late",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "max(0, arrival - start week)"
+      },
+      {
+        "name": "service_score",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": 1,
+        "rule": null,
+        "description": "fill_rate * max(0, 1 - 0.15 * weeks_late)"
+      },
+      {
+        "name": "total_cost",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "USD",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Cash cost of the action"
+      },
+      {
+        "name": "incremental_cost",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "USD",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Premium over normal replenishment (or lost margin for backorder)"
+      },
+      {
+        "name": "net_benefit",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "USD",
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "service_score * shortage_value - incremental_cost"
+      },
+      {
+        "name": "capacity_available",
+        "type": "integer",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Capacity/surplus available before this option"
+      },
+      {
+        "name": "capacity_consumed",
+        "type": "integer",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Capacity/surplus this option would use"
+      },
+      {
+        "name": "lead_time_days",
+        "type": "integer",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Lead time applied"
+      },
+      {
+        "name": "moq_check",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "PASS",
+          "N/A"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "PASS / N/A"
+      },
+      {
+        "name": "lead_time_check",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "PASS",
+          "N/A"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "PASS / N/A"
+      },
+      {
+        "name": "approval_check",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "PASS",
+          "N/A"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "PASS / N/A"
+      },
+      {
+        "name": "capacity_check",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "PASS",
+          "N/A"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "PASS / N/A"
+      },
+      {
+        "name": "is_recommended",
+        "type": "boolean",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Highest net benefit (capacity reserved)"
+      },
+      {
+        "name": "rationale",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Explanation"
+      }
+    ]
+  },
+  "rejected_mitigation": {
+    "entity": "Rejected mitigation (derived, audit)",
+    "layer": "output",
+    "description": "Candidates that were considered and rejected, with the policy or constraint that failed.",
+    "grain": "one row per rejected candidate",
+    "primary_key": "rejection_id",
+    "natural_key": null,
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "shortage_id"
+        ],
+        "ref_table": "shortage",
+        "ref_columns": [
+          "shortage_id"
+        ],
+        "cardinality": "N:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "rejection_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^REJ-SHORT-\\d{4}-\\d{6}-\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "REJ-<shortage_id>-<nn>"
+      },
+      {
+        "name": "shortage_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SHORT-\\d{4}-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Shortage"
+      },
+      {
+        "name": "mitigation_type",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "EXPEDITE_PO",
+          "NEW_PO_PRIMARY",
+          "NEW_PO_ALTERNATE",
+          "STOCK_TRANSFER",
+          "APPROVED_SUBSTITUTE",
+          "INCREASE_PRODUCTION",
+          "ACCEPT_BACKORDER"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Candidate type"
+      },
+      {
+        "name": "candidate_ref",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Supplier / location / substitution / PO considered"
+      },
+      {
+        "name": "reason_code",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "SUBSTITUTE_NOT_APPROVED",
+          "SUBSTITUTE_NOT_EFFECTIVE",
+          "SUPPLIER_ON_HOLD",
+          "INSUFFICIENT_CAPACITY",
+          "LEAD_TIME_TOO_LONG",
+          "NO_SURPLUS",
+          "NO_LANE",
+          "BELOW_MOQ",
+          "COMPONENT_SHORTAGE",
+          "NO_BENEFIT"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Failed rule"
+      },
+      {
+        "name": "detail",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Explanation"
+      }
+    ]
+  },
+  "detected_issue": {
+    "entity": "Detected data/plan issue (derived)",
+    "layer": "output",
+    "description": "Exceptions detected by the planning engine's data-quality screen, with the decision taken.",
+    "grain": "one row per detected issue",
+    "primary_key": "issue_id",
+    "natural_key": null,
+    "lifecycle": null,
+    "foreign_keys": [],
+    "fields": [
+      {
+        "name": "issue_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^ISS-\\d{4}-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "ISS-<year>-<counter>"
+      },
+      {
+        "name": "issue_type",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "INBOUND_DOUBLE_COUNT",
+          "SUBSTITUTE_NOT_APPROVED",
+          "SUPPLIER_CAPACITY_EXCEEDED",
+          "SHORTAGE_WITHOUT_LEAD_TIME",
+          "UOM_MISMATCH",
+          "DEMAND_SPIKE",
+          "CONSTRAINED_SUPPLIER",
+          "CONSTRAINED_PLANT"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Issue"
+      },
+      {
+        "name": "severity",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "HIGH",
+          "MEDIUM",
+          "LOW",
+          "INFO"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Severity"
+      },
+      {
+        "name": "record_type",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Table of the offending record"
+      },
+      {
+        "name": "record_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Offending record ID"
+      },
+      {
+        "name": "related_record_ids",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Pipe-separated related IDs"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Location"
+      },
+      {
+        "name": "supplier_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Supplier"
+      },
+      {
+        "name": "week_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Week"
+      },
+      {
+        "name": "decision",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Action taken by the engine"
+      },
+      {
+        "name": "impact_qty",
+        "type": "integer",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Quantity affected"
+      },
+      {
+        "name": "detail",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Explanation"
+      }
+    ]
+  },
+  "supplier_capacity_utilization": {
+    "entity": "Supplier capacity utilisation (derived)",
+    "layer": "output",
+    "description": "Committed open-PO load and mitigation reservations versus supplier capacity per week.",
+    "grain": "one row per supplier-week",
+    "primary_key": "supplier_capacity_id",
+    "natural_key": null,
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "supplier_capacity_id"
+        ],
+        "ref_table": "supplier_capacity",
+        "ref_columns": [
+          "supplier_capacity_id"
+        ],
+        "cardinality": "1:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "supplier_capacity_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SCAP-SUP-\\d{4}-\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Capacity row"
+      },
+      {
+        "name": "supplier_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^SUP-\\d{4}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Supplier"
+      },
+      {
+        "name": "week_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Week"
+      },
+      {
+        "name": "capacity_units",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Capacity"
+      },
+      {
+        "name": "source_committed_units",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Load as recorded in source POs"
+      },
+      {
+        "name": "planned_committed_units",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Load after capacity deferral"
+      },
+      {
+        "name": "mitigation_reserved_units",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Reserved by recommended mitigations"
+      },
+      {
+        "name": "utilization_pct",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "percent",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "(planned + reserved) / capacity"
+      },
+      {
+        "name": "source_over_capacity",
+        "type": "boolean",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "source_committed_units > capacity_units"
+      }
+    ]
+  },
+  "production_capacity_utilization": {
+    "entity": "Production capacity utilisation (derived)",
+    "layer": "output",
+    "description": "Planned production plus mitigation reservations versus plant capacity per week.",
+    "grain": "one row per plant-week",
+    "primary_key": "production_capacity_id",
+    "natural_key": null,
+    "lifecycle": null,
+    "foreign_keys": [
+      {
+        "columns": [
+          "production_capacity_id"
+        ],
+        "ref_table": "production_capacity",
+        "ref_columns": [
+          "production_capacity_id"
+        ],
+        "cardinality": "1:1",
+        "optional": false
+      }
+    ],
+    "fields": [
+      {
+        "name": "production_capacity_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^PCAP-LOC-\\d{3}-\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Capacity row"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^LOC-\\d{3}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Plant"
+      },
+      {
+        "name": "week_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^\\d{4}W\\d{2}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Week"
+      },
+      {
+        "name": "capacity_units",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Capacity"
+      },
+      {
+        "name": "planned_units",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Planned production"
+      },
+      {
+        "name": "mitigation_reserved_units",
+        "type": "integer",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "Reserved by recommended mitigations"
+      },
+      {
+        "name": "utilization_pct",
+        "type": "decimal",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": "percent",
+        "pattern": null,
+        "min": 0,
+        "max": null,
+        "rule": null,
+        "description": "(planned + reserved) / capacity"
+      }
+    ]
+  },
+  "ground_truth": {
+    "entity": "Ground truth (separate, never an input)",
+    "layer": "ground_truth",
+    "description": "Labels for injected edge cases and generator scenario drivers. Stored outside the input folder.",
+    "grain": "one row per labelled record",
+    "primary_key": "gt_id",
+    "natural_key": null,
+    "lifecycle": null,
+    "foreign_keys": [],
+    "fields": [
+      {
+        "name": "gt_id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": "^GT-\\d{6}$",
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Label identifier"
+      },
+      {
+        "name": "label_category",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "EDGE_CASE",
+          "SCENARIO"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Edge case or scenario driver"
+      },
+      {
+        "name": "issue_type",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": [
+          "INBOUND_DOUBLE_COUNT",
+          "SUBSTITUTE_NOT_APPROVED",
+          "SUPPLIER_CAPACITY_EXCEEDED",
+          "SHORTAGE_WITHOUT_LEAD_TIME",
+          "UOM_MISMATCH",
+          "DEMAND_SPIKE",
+          "CONSTRAINED_SUPPLIER",
+          "CONSTRAINED_PLANT"
+        ],
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Label"
+      },
+      {
+        "name": "record_type",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Table of the labelled record"
+      },
+      {
+        "name": "record_id",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Labelled record ID"
+      },
+      {
+        "name": "related_record_ids",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Pipe-separated traceability IDs"
+      },
+      {
+        "name": "sku_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "SKU"
+      },
+      {
+        "name": "location_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Location"
+      },
+      {
+        "name": "supplier_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Supplier"
+      },
+      {
+        "name": "week_id",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Week"
+      },
+      {
+        "name": "expected_decision",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "What a correct planner/engine must do"
+      },
+      {
+        "name": "expected_value",
+        "type": "string",
+        "required": false,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Expected corrected value"
+      },
+      {
+        "name": "rule_reference",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Documented rule (docs/edge_cases.md)"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": true,
+        "unique": false,
+        "allowed_values": null,
+        "unit": null,
+        "pattern": null,
+        "min": null,
+        "max": null,
+        "rule": null,
+        "description": "Explanation"
+      }
+    ]
+  }
+}

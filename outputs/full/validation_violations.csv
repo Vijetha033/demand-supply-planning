@@ -1,0 +1,61 @@
+check,category,table,record_id,detail,classification
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-010011,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-010012,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-010013,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-010014,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-010015,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-010016,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-010017,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-010018,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-010019,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+arithmetic:po_lead_time,arithmetic,purchase_order,PO-2026-010020,lane_ok=True effective_ok=True ship_ok=False promised_ok=False,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-010021-L01,14 CS x 1.0 vs master factor 12.0,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-010022-L01,1 KG x 1.0 vs master factor nan,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-010023-L01,2 CS x 1.0 vs master factor 12.0,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-010024-L01,4 KG x 1.0 vs master factor nan,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-010025-L01,1 CS x 1.0 vs master factor 12.0,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-010026-L01,50 KG x 1.0 vs master factor nan,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-010027-L01,2 CS x 1.0 vs master factor 6.0,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-010028-L01,1 KG x 1.0 vs master factor nan,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-010029-L01,1 CS x 1.0 vs master factor 12.0,EXPECTED_LABELLED
+uom:po_line,uom,purchase_order_line,PO-2026-010030-L01,1 KG x 1.0 vs master factor nan,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0071-2026W16,committed 2370 > capacity 1820,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0136-2026W05,committed 1729 > capacity 1330,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0150-2026W39,committed 1392 > capacity 1070,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0181-2026W45,committed 3731 > capacity 2870,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0213-2026W12,committed 1222 > capacity 940,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0220-2026W17,committed 270 > capacity 190,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0234-2026W34,committed 360 > capacity 260,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0264-2026W35,committed 1188 > capacity 910,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0299-2026W43,committed 684 > capacity 520,EXPECTED_LABELLED
+capacity:supplier_source,capacity,supplier_capacity,SCAP-SUP-0457-2026W26,committed 672 > capacity 510,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000135,substitute link is PENDING,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000136,substitute link is REJECTED,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000137,substitute link is PENDING,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000138,substitute link is REJECTED,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000139,substitute link is PENDING,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000140,substitute link is REJECTED,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000141,substitute link is PENDING,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000142,substitute link is REJECTED,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000143,substitute link is PENDING,EXPECTED_LABELLED
+policy:substitute_approval,policy,sku_substitute,SUB-000144,substitute link is REJECTED,EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-005604,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-005605,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-005606,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-005607,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-005608,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-005609,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-005610,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-005611,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-005612,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:inventory_in_transit,duplicate,inventory,INV-005613,PO line already has an in-transit record (inbound counted twice),EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-005604,row duplicates another record,EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-005605,row duplicates another record,EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-005606,row duplicates another record,EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-005607,row duplicates another record,EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-005608,row duplicates another record,EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-005609,row duplicates another record,EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-005610,row duplicates another record,EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-005611,row duplicates another record,EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-005612,row duplicates another record,EXPECTED_LABELLED
+duplicate:exact_rows,duplicate,inventory,INV-005613,row duplicates another record,EXPECTED_LABELLED

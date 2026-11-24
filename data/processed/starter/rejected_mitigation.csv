@@ -1,0 +1,192 @@
+rejection_id,shortage_id,mitigation_type,candidate_ref,reason_code,detail
+REJ-SHORT-2026-000002-01,SHORT-2026-000002,NEW_PO_PRIMARY,SUP-0036,INSUFFICIENT_CAPACITY,remaining capacity below MOQ 69 CS in every ship week from today to the latest useful order week
+REJ-SHORT-2026-000002-02,SHORT-2026-000002,NEW_PO_ALTERNATE,SUP-0017,LEAD_TIME_TOO_LONG,order today arrives 2026W04 (26 days) after the shortage ends 2026W03
+REJ-SHORT-2026-000003-01,SHORT-2026-000003,NEW_PO_PRIMARY,SUP-0006,LEAD_TIME_TOO_LONG,order today arrives 2026W03 (14 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000003-02,SHORT-2026-000003,NEW_PO_ALTERNATE,SUP-0025,LEAD_TIME_TOO_LONG,order today arrives 2026W03 (16 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000006-01,SHORT-2026-000006,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000007-01,SHORT-2026-000007,STOCK_TRANSFER,LOC-007|LOC-008,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000008-01,SHORT-2026-000008,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000011-01,SHORT-2026-000011,NEW_PO_PRIMARY,SUP-0007,LEAD_TIME_TOO_LONG,order today arrives 2026W06 (39 days) after the shortage ends 2026W01
+REJ-SHORT-2026-000012-01,SHORT-2026-000012,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000014-01,SHORT-2026-000014,NEW_PO_PRIMARY,SUP-0007,LEAD_TIME_TOO_LONG,order today arrives 2026W05 (34 days) after the shortage ends 2026W01
+REJ-SHORT-2026-000015-01,SHORT-2026-000015,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000017-01,SHORT-2026-000017,NEW_PO_PRIMARY,SUP-0006,LEAD_TIME_TOO_LONG,order today arrives 2026W03 (14 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000017-02,SHORT-2026-000017,NEW_PO_ALTERNATE,SUP-0018,LEAD_TIME_TOO_LONG,order today arrives 2026W03 (15 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000018-01,SHORT-2026-000018,STOCK_TRANSFER,LOC-005|LOC-008,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000019-01,SHORT-2026-000019,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000020-01,SHORT-2026-000020,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000021-01,SHORT-2026-000021,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000022-01,SHORT-2026-000022,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000023-01,SHORT-2026-000023,NEW_PO_PRIMARY,SUP-0006,LEAD_TIME_TOO_LONG,order today arrives 2026W03 (14 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000023-02,SHORT-2026-000023,NEW_PO_ALTERNATE,SUP-0023,LEAD_TIME_TOO_LONG,order today arrives 2026W04 (23 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000024-01,SHORT-2026-000024,NEW_PO_PRIMARY,SUP-0037,LEAD_TIME_TOO_LONG,order today arrives 2026W03 (16 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000025-01,SHORT-2026-000025,STOCK_TRANSFER,LOC-001,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000026-01,SHORT-2026-000026,STOCK_TRANSFER,LOC-001,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000027-01,SHORT-2026-000027,NEW_PO_PRIMARY,SUP-0030,INSUFFICIENT_CAPACITY,remaining capacity below MOQ 7 CS in every ship week from today to the latest useful order week
+REJ-SHORT-2026-000027-02,SHORT-2026-000027,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000027-03,SHORT-2026-000027,APPROVED_SUBSTITUTE,SUB-000002:SKU-000163,NO_SURPLUS,SKU-000163 has no stock above safety stock at LOC-004 from 2026W01
+REJ-SHORT-2026-000027-04,SHORT-2026-000027,APPROVED_SUBSTITUTE,SUB-000012:SKU-000070,SUBSTITUTE_NOT_APPROVED,substitution SUB-000012 is PENDING; would have offered 0 units at LOC-004 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000028-01,SHORT-2026-000028,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000028-02,SHORT-2026-000028,APPROVED_SUBSTITUTE,SUB-000005:SKU-000262,NO_SURPLUS,SKU-000262 has no stock above safety stock at LOC-008 from 2026W34
+REJ-SHORT-2026-000029-01,SHORT-2026-000029,NEW_PO_PRIMARY,SUP-0021,LEAD_TIME_TOO_LONG,order today arrives 2026W06 (40 days) after the shortage ends 2026W03
+REJ-SHORT-2026-000029-02,SHORT-2026-000029,NEW_PO_ALTERNATE,SUP-0026,SUPPLIER_ON_HOLD,SUP-0026 is ON_HOLD; no new orders allowed
+REJ-SHORT-2026-000031-01,SHORT-2026-000031,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000031-02,SHORT-2026-000031,APPROVED_SUBSTITUTE,SUB-000005:SKU-000262,NO_SURPLUS,SKU-000262 has no stock above safety stock at LOC-004 from 2026W37
+REJ-SHORT-2026-000036-01,SHORT-2026-000036,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000037-01,SHORT-2026-000037,NEW_PO_PRIMARY,SUP-0021,LEAD_TIME_TOO_LONG,order today arrives 2026W06 (40 days) after the shortage ends 2026W03
+REJ-SHORT-2026-000038-01,SHORT-2026-000038,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000040-01,SHORT-2026-000040,STOCK_TRANSFER,LOC-005|LOC-008,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000041-01,SHORT-2026-000041,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000044-01,SHORT-2026-000044,NEW_PO_PRIMARY,SUP-0021,LEAD_TIME_TOO_LONG,order today arrives 2026W06 (40 days) after the shortage ends 2026W03
+REJ-SHORT-2026-000044-02,SHORT-2026-000044,NEW_PO_ALTERNATE,SUP-0005,LEAD_TIME_TOO_LONG,order today arrives 2026W04 (27 days) after the shortage ends 2026W03
+REJ-SHORT-2026-000045-01,SHORT-2026-000045,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000047-01,SHORT-2026-000047,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000049-01,SHORT-2026-000049,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000050-01,SHORT-2026-000050,NEW_PO_ALTERNATE,SUP-0016,LEAD_TIME_TOO_LONG,order today arrives 2026W04 (21 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000050-02,SHORT-2026-000050,NEW_PO_ALTERNATE,SUP-0029,LEAD_TIME_TOO_LONG,order today arrives 2026W05 (28 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000050-03,SHORT-2026-000050,STOCK_TRANSFER,LOC-006|LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000051-01,SHORT-2026-000051,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000056-01,SHORT-2026-000056,STOCK_TRANSFER,LOC-001,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000059-01,SHORT-2026-000059,STOCK_TRANSFER,LOC-006,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000061-01,SHORT-2026-000061,NEW_PO_PRIMARY,SUP-0032,LEAD_TIME_TOO_LONG,order today arrives 2026W03 (18 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000067-01,SHORT-2026-000067,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000067-02,SHORT-2026-000067,APPROVED_SUBSTITUTE,SUB-000012:SKU-000070,SUBSTITUTE_NOT_APPROVED,substitution SUB-000012 is PENDING; would have offered 32 units at LOC-008 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000073-01,SHORT-2026-000073,NEW_PO_PRIMARY,SUP-0021,LEAD_TIME_TOO_LONG,order today arrives 2026W06 (40 days) after the shortage ends 2026W03
+REJ-SHORT-2026-000073-02,SHORT-2026-000073,NEW_PO_ALTERNATE,SUP-0008,LEAD_TIME_TOO_LONG,order today arrives 2026W04 (21 days) after the shortage ends 2026W03
+REJ-SHORT-2026-000076-01,SHORT-2026-000076,STOCK_TRANSFER,LOC-003|LOC-007,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000078-01,SHORT-2026-000078,STOCK_TRANSFER,LOC-001,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000079-01,SHORT-2026-000079,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000080-01,SHORT-2026-000080,STOCK_TRANSFER,LOC-005,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000081-01,SHORT-2026-000081,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000088-01,SHORT-2026-000088,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000089-01,SHORT-2026-000089,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000091-01,SHORT-2026-000091,STOCK_TRANSFER,LOC-005|LOC-008,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000092-01,SHORT-2026-000092,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000093-01,SHORT-2026-000093,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000094-01,SHORT-2026-000094,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000096-01,SHORT-2026-000096,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000097-01,SHORT-2026-000097,NEW_PO_PRIMARY,SUP-0032,LEAD_TIME_TOO_LONG,order today arrives 2026W03 (18 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000097-02,SHORT-2026-000097,NEW_PO_ALTERNATE,SUP-0003,LEAD_TIME_TOO_LONG,order today arrives 2026W03 (19 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000097-03,SHORT-2026-000097,NEW_PO_ALTERNATE,SUP-0005,LEAD_TIME_TOO_LONG,order today arrives 2026W04 (27 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000098-01,SHORT-2026-000098,STOCK_TRANSFER,LOC-001,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000099-01,SHORT-2026-000099,STOCK_TRANSFER,LOC-003|LOC-007,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000102-01,SHORT-2026-000102,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000103-01,SHORT-2026-000103,STOCK_TRANSFER,LOC-005|LOC-008,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000104-01,SHORT-2026-000104,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W52
+REJ-SHORT-2026-000105-01,SHORT-2026-000105,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000106-01,SHORT-2026-000106,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000108-01,SHORT-2026-000108,STOCK_TRANSFER,LOC-004|LOC-008,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000109-01,SHORT-2026-000109,STOCK_TRANSFER,LOC-003|LOC-007,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000111-01,SHORT-2026-000111,STOCK_TRANSFER,LOC-005,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000112-01,SHORT-2026-000112,STOCK_TRANSFER,LOC-003|LOC-007,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000113-01,SHORT-2026-000113,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000115-01,SHORT-2026-000115,STOCK_TRANSFER,LOC-005,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000116-01,SHORT-2026-000116,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000117-01,SHORT-2026-000117,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000119-01,SHORT-2026-000119,NEW_PO_PRIMARY,SUP-0021,LEAD_TIME_TOO_LONG,order today arrives 2026W06 (40 days) after the shortage ends 2026W03
+REJ-SHORT-2026-000119-02,SHORT-2026-000119,STOCK_TRANSFER,LOC-009,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000120-01,SHORT-2026-000120,STOCK_TRANSFER,LOC-005|LOC-008,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000125-01,SHORT-2026-000125,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000126-01,SHORT-2026-000126,STOCK_TRANSFER,LOC-005,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000128-01,SHORT-2026-000128,STOCK_TRANSFER,LOC-005,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000133-01,SHORT-2026-000133,STOCK_TRANSFER,LOC-005,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000135-01,SHORT-2026-000135,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000136-01,SHORT-2026-000136,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000136-02,SHORT-2026-000136,APPROVED_SUBSTITUTE,SUB-000013:SKU-000016,SUBSTITUTE_NOT_APPROVED,substitution SUB-000013 is REJECTED; would have offered 249 units at LOC-003 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000142-01,SHORT-2026-000142,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000142-02,SHORT-2026-000142,APPROVED_SUBSTITUTE,SUB-000005:SKU-000262,NO_SURPLUS,SKU-000262 has no stock above safety stock at LOC-008 from 2026W31
+REJ-SHORT-2026-000143-01,SHORT-2026-000143,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000144-01,SHORT-2026-000144,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000144-02,SHORT-2026-000144,APPROVED_SUBSTITUTE,SUB-000005:SKU-000262,NO_SURPLUS,SKU-000262 has no stock above safety stock at LOC-004 from 2026W34
+REJ-SHORT-2026-000146-01,SHORT-2026-000146,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W25
+REJ-SHORT-2026-000149-01,SHORT-2026-000149,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000149-02,SHORT-2026-000149,APPROVED_SUBSTITUTE,SUB-000011:SKU-000263,NO_SURPLUS,SKU-000263 has no stock above safety stock at LOC-007 from 2026W34
+REJ-SHORT-2026-000151-01,SHORT-2026-000151,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000152-01,SHORT-2026-000152,NEW_PO_PRIMARY,SUP-0015,LEAD_TIME_TOO_LONG,order today arrives 2026W04 (25 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000152-02,SHORT-2026-000152,NEW_PO_ALTERNATE,SUP-0049,LEAD_TIME_TOO_LONG,order today arrives 2026W03 (18 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000155-01,SHORT-2026-000155,STOCK_TRANSFER,LOC-005,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000156-01,SHORT-2026-000156,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000156-02,SHORT-2026-000156,APPROVED_SUBSTITUTE,SUB-000011:SKU-000263,NO_SURPLUS,SKU-000263 has no stock above safety stock at LOC-007 from 2026W44
+REJ-SHORT-2026-000158-01,SHORT-2026-000158,STOCK_TRANSFER,LOC-001,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000168-01,SHORT-2026-000168,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000171-01,SHORT-2026-000171,STOCK_TRANSFER,LOC-001,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000172-01,SHORT-2026-000172,STOCK_TRANSFER,LOC-001,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000173-01,SHORT-2026-000173,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000176-01,SHORT-2026-000176,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000179-01,SHORT-2026-000179,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000179-02,SHORT-2026-000179,APPROVED_SUBSTITUTE,SUB-000012:SKU-000070,SUBSTITUTE_NOT_APPROVED,substitution SUB-000012 is PENDING; would have offered 32 units at LOC-008 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000183-01,SHORT-2026-000183,NEW_PO_PRIMARY,SUP-0015,LEAD_TIME_TOO_LONG,order today arrives 2026W04 (25 days) after the shortage ends 2026W02
+REJ-SHORT-2026-000187-01,SHORT-2026-000187,STOCK_TRANSFER,LOC-006,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000189-01,SHORT-2026-000189,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000190-01,SHORT-2026-000190,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000192-01,SHORT-2026-000192,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000194-01,SHORT-2026-000194,STOCK_TRANSFER,LOC-001,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000195-01,SHORT-2026-000195,STOCK_TRANSFER,LOC-006,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000200-01,SHORT-2026-000200,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W24
+REJ-SHORT-2026-000202-01,SHORT-2026-000202,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000204-01,SHORT-2026-000204,NEW_PO_ALTERNATE,SUP-0012,LEAD_TIME_TOO_LONG,order today arrives 2026W07 (45 days) after the shortage ends 2026W05
+REJ-SHORT-2026-000206-01,SHORT-2026-000206,STOCK_TRANSFER,LOC-006,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000207-01,SHORT-2026-000207,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000208-01,SHORT-2026-000208,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000209-01,SHORT-2026-000209,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000211-01,SHORT-2026-000211,STOCK_TRANSFER,LOC-005,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000214-01,SHORT-2026-000214,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000217-01,SHORT-2026-000217,NEW_PO_PRIMARY,SUP-0021,LEAD_TIME_TOO_LONG,order today arrives 2026W06 (40 days) after the shortage ends 2026W03
+REJ-SHORT-2026-000220-01,SHORT-2026-000220,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000223-01,SHORT-2026-000223,STOCK_TRANSFER,LOC-001,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000226-01,SHORT-2026-000226,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000228-01,SHORT-2026-000228,STOCK_TRANSFER,LOC-006,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000229-01,SHORT-2026-000229,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000230-01,SHORT-2026-000230,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W25
+REJ-SHORT-2026-000232-01,SHORT-2026-000232,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000234-01,SHORT-2026-000234,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000234-02,SHORT-2026-000234,APPROVED_SUBSTITUTE,SUB-000013:SKU-000016,SUBSTITUTE_NOT_APPROVED,substitution SUB-000013 is REJECTED; would have offered 192 units at LOC-003 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000236-01,SHORT-2026-000236,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000238-01,SHORT-2026-000238,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000238-02,SHORT-2026-000238,APPROVED_SUBSTITUTE,SUB-000002:SKU-000163,NO_SURPLUS,SKU-000163 has no stock above safety stock at LOC-008 from 2026W15
+REJ-SHORT-2026-000238-03,SHORT-2026-000238,APPROVED_SUBSTITUTE,SUB-000012:SKU-000070,SUBSTITUTE_NOT_APPROVED,substitution SUB-000012 is PENDING; would have offered 32 units at LOC-008 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000239-01,SHORT-2026-000239,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000240-01,SHORT-2026-000240,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W20
+REJ-SHORT-2026-000242-01,SHORT-2026-000242,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000243-01,SHORT-2026-000243,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000245-01,SHORT-2026-000245,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W25
+REJ-SHORT-2026-000246-01,SHORT-2026-000246,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W22
+REJ-SHORT-2026-000247-01,SHORT-2026-000247,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000247-02,SHORT-2026-000247,APPROVED_SUBSTITUTE,SUB-000012:SKU-000070,SUBSTITUTE_NOT_APPROVED,substitution SUB-000012 is PENDING; would have offered 32 units at LOC-008 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000249-01,SHORT-2026-000249,STOCK_TRANSFER,LOC-005|LOC-010,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000251-01,SHORT-2026-000251,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000252-01,SHORT-2026-000252,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000252-02,SHORT-2026-000252,APPROVED_SUBSTITUTE,SUB-000002:SKU-000163,NO_SURPLUS,SKU-000163 has no stock above safety stock at LOC-008 from 2026W12
+REJ-SHORT-2026-000252-03,SHORT-2026-000252,APPROVED_SUBSTITUTE,SUB-000012:SKU-000070,SUBSTITUTE_NOT_APPROVED,substitution SUB-000012 is PENDING; would have offered 32 units at LOC-008 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000257-01,SHORT-2026-000257,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000257-02,SHORT-2026-000257,APPROVED_SUBSTITUTE,SUB-000002:SKU-000163,NO_SURPLUS,SKU-000163 has no stock above safety stock at LOC-008 from 2026W10
+REJ-SHORT-2026-000257-03,SHORT-2026-000257,APPROVED_SUBSTITUTE,SUB-000012:SKU-000070,SUBSTITUTE_NOT_APPROVED,substitution SUB-000012 is PENDING; would have offered 26 units at LOC-008 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000258-01,SHORT-2026-000258,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000258-02,SHORT-2026-000258,APPROVED_SUBSTITUTE,SUB-000013:SKU-000016,SUBSTITUTE_NOT_APPROVED,substitution SUB-000013 is REJECTED; would have offered 175 units at LOC-003 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000259-01,SHORT-2026-000259,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000262-01,SHORT-2026-000262,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000267-01,SHORT-2026-000267,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000269-01,SHORT-2026-000269,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000276-01,SHORT-2026-000276,STOCK_TRANSFER,LOC-005|LOC-010,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000283-01,SHORT-2026-000283,STOCK_TRANSFER,LOC-004,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000287-01,SHORT-2026-000287,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W20
+REJ-SHORT-2026-000288-01,SHORT-2026-000288,STOCK_TRANSFER,LOC-010,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000288-02,SHORT-2026-000288,APPROVED_SUBSTITUTE,SUB-000013:SKU-000016,SUBSTITUTE_NOT_APPROVED,substitution SUB-000013 is REJECTED; would have offered 103 units at LOC-003 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000289-01,SHORT-2026-000289,APPROVED_SUBSTITUTE,SUB-000014:SKU-000021,SUBSTITUTE_NOT_APPROVED,substitution SUB-000014 is PENDING; would have offered 187 units at LOC-009 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000290-01,SHORT-2026-000290,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000296-01,SHORT-2026-000296,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W20
+REJ-SHORT-2026-000298-01,SHORT-2026-000298,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W22
+REJ-SHORT-2026-000299-01,SHORT-2026-000299,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W21
+REJ-SHORT-2026-000301-01,SHORT-2026-000301,STOCK_TRANSFER,LOC-007,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000302-01,SHORT-2026-000302,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000304-01,SHORT-2026-000304,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000305-01,SHORT-2026-000305,APPROVED_SUBSTITUTE,SUB-000014:SKU-000021,SUBSTITUTE_NOT_APPROVED,substitution SUB-000014 is PENDING; would have offered 187 units at LOC-009 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000306-01,SHORT-2026-000306,STOCK_TRANSFER,LOC-007,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000307-01,SHORT-2026-000307,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W20
+REJ-SHORT-2026-000312-01,SHORT-2026-000312,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000313-01,SHORT-2026-000313,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W22
+REJ-SHORT-2026-000314-01,SHORT-2026-000314,INCREASE_PRODUCTION,LOC-002,COMPONENT_SHORTAGE,plant LOC-002 has headroom but components lack stock above safety stock between 2026W03 and 2026W22
+REJ-SHORT-2026-000315-01,SHORT-2026-000315,STOCK_TRANSFER,LOC-008,NO_SURPLUS,1 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000317-01,SHORT-2026-000317,STOCK_TRANSFER,LOC-005|LOC-010,NO_SURPLUS,2 other location(s) checked; none has stock above safety stock for the whole horizon
+REJ-SHORT-2026-000318-01,SHORT-2026-000318,APPROVED_SUBSTITUTE,SUB-000014:SKU-000021,SUBSTITUTE_NOT_APPROVED,substitution SUB-000014 is PENDING; would have offered 187 units at LOC-009 but policy forbids unapproved substitutes
+REJ-SHORT-2026-000321-01,SHORT-2026-000321,APPROVED_SUBSTITUTE,SUB-000014:SKU-000021,SUBSTITUTE_NOT_APPROVED,substitution SUB-000014 is PENDING; would have offered 187 units at LOC-009 but policy forbids unapproved substitutes
